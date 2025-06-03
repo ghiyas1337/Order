@@ -246,6 +246,36 @@
         <button id="senjata5">Beli</button>
         <p id="senjata-5"></p>
       </div>
+      <div class="product-card">
+  <h2>Kevlar</h2>
+  <p>40 KEVLAR = 10K OOC<br>90 KEVLAR = 20K OOC</p>
+  <button id="item-kevlar">Beli</button>
+  <p id="stok-kevlar"></p>
+</div>
+<div class="product-card">
+  <h2>Marjun</h2>
+  <p>150 MARJUN = 10K OOC<br>350 MARJUN = 20K OOC</p>
+  <button id="item-marjun">Beli</button>
+  <p id="stok-marjun"></p>
+</div>
+<div class="product-card">
+  <h2>Perban</h2>
+  <p>150 PERBAN = 10K OOC<br>350 PERBAN = 20K OOC</p>
+  <button id="item-perban">Beli</button>
+  <p id="stok-perban"></p>
+</div>
+<div class="product-card">
+  <h2>Pil Stress</h2>
+  <p>100 PIL = 10K OOC<br>220 PIL = 20K OOC</p>
+  <button id="item-pil">Beli</button>
+  <p id="stok-pil"></p>
+</div>
+<div class="product-card">
+  <h2>Makan & Minum</h2>
+  <p>500 MAKAN + 500 MINUM = 10K OOC</p>
+  <button id="item-makanminum">Beli</button>
+  <p id="stok-makanminum"></p>
+</div>
     </div>
 
     <div class="product-list" id="item-section" style="margin-top: 50px;">
@@ -260,15 +290,20 @@
   </main>
 
   <script>
-    const stok = {
-      'UANG IC': 10000000,
-      'UANG IC VIA LOGIN': 0,
-      'De': 10000,
-      'Slc':30000,
-      'Rif': 30000,
-      'sg': 10000,
-      'AK': 10000,
-    };
+  const stok = {
+  'UANG IC': 3,
+  'UANG IC VIA LOGIN': 0,
+  'De': 99,
+  'Slc': 99,
+  'Rif': 999,
+  'sg': 99,
+  'AK': 99,
+  'Kevlar': 50,
+  'Marjun': 100,
+  'Perban': 75,
+  'Pil': 120,
+  'MakanMinum': 200
+};
 
     function updateStok() {
       const btnUangIC = document.getElementById('uic');
@@ -351,6 +386,65 @@ if (stok['AK'] > 0) {
   btn.classList.add('out-of-stock');
   btn.innerText = 'Stok Habis';
   document.getElementById('senjata-5').innerText = `Stok: 0`;
+}
+      // Kevlar
+if (stok['Kevlar'] > 0) {
+  document.getElementById('item-kevlar').onclick = () => goToPayment('Kevlar');
+  document.getElementById('stok-kevlar').innerText = `Stok: ${stok['Kevlar']}`;
+} else {
+  const btn = document.getElementById('item-kevlar');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('stok-kevlar').innerText = 'Stok: 0';
+}
+
+// Marjun
+if (stok['Marjun'] > 0) {
+  document.getElementById('item-marjun').onclick = () => goToPayment('Marjun');
+  document.getElementById('stok-marjun').innerText = `Stok: ${stok['Marjun']}`;
+} else {
+  const btn = document.getElementById('item-marjun');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('stok-marjun').innerText = 'Stok: 0';
+}
+
+// Perban
+if (stok['Perban'] > 0) {
+  document.getElementById('item-perban').onclick = () => goToPayment('Perban');
+  document.getElementById('stok-perban').innerText = `Stok: ${stok['Perban']}`;
+} else {
+  const btn = document.getElementById('item-perban');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('stok-perban').innerText = 'Stok: 0';
+}
+
+// Pil Stress
+if (stok['Pil'] > 0) {
+  document.getElementById('item-pil').onclick = () => goToPayment('Pil Stress');
+  document.getElementById('stok-pil').innerText = `Stok: ${stok['Pil']}`;
+} else {
+  const btn = document.getElementById('item-pil');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('stok-pil').innerText = 'Stok: 0';
+}
+
+// Makan & Minum
+if (stok['MakanMinum'] > 0) {
+  document.getElementById('item-makanminum').onclick = () => goToPayment('Makan & Minum');
+  document.getElementById('stok-makanminum').innerText = `Stok: ${stok['MakanMinum']}`;
+} else {
+  const btn = document.getElementById('item-makanminum');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('stok-makanminum').innerText = 'Stok: 0';
 }
     }
 
