@@ -23,8 +23,9 @@
 
   <script>
     function order(productName) {
-      // Redirect ke halaman chat dengan query string produk
-      window.location.href = `chat.html?product=${encodeURIComponent(productName)}`;
+  const phone = '628123456789'; // Ganti dengan nomor WA kamu
+  const message = `Halo! Saya ingin membeli ${productName}`;
+  window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     }
   </script>
 </body>
