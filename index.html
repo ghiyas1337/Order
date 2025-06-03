@@ -5,28 +5,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RTM DIMZ | DIASZ</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .out-of-stock {
+      background-color: #ccc;
+      color: #666;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
-  <h1>RTM DIASZ|DIMZ</h1>
+  <h1>RTM DIASZ | DIMZ</h1>
   <div class="product-list">
     <div class="product-card">
       <h2>UANG IC</h2>
-      <p>100K = 10.000 OOC <br> 200K = 20.000 OOC <br> 300K = 30.000 </p>
-      <button onclick="order('MAU BELI UIC')">Beli</button>
+      <p>100K = 10.000 OOC <br> 200K = 20.000 OOC <br> 300K = 30.000</p>
+      <button id="uic">Beli</button>
+      <p id="stok-uang-ic"></p>
     </div>
     <div class="product-card">
       <h2>UANG IC VIA LOGIN</h2>
       <p>200K = 20.000 OOC <br> 500K = 40K <br> DAN SETERUSNYA</p>
-      <button onclick="order('MAU BELI UIC')">Beli</button>
+      <button id="uicvilog">Beli</button>
+      <p id="stok-uang-ic-login"></p>
     </div>
   </div>
 
   <script>
-    function order(productName) {
-  const phone = '6282118486096';
-  const message = `Halo! Saya ingin membeli ${productName}`;
-  window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    // Atur stok di sini
+    const stok = {
+      'UANG IC': 3,
+      'UANG IC VIA LOGIN': 0
+    };
+
+    function updateStok() {
+      const btnUangIC = document.getElementById('uic');
+      const btnUangICLogin = document.getElementById('uicvilog');
+
+      // UANG IC
+      if (stok['UANG IC'] > 0) {
+        btnUangIC.onclick = () => goToPayment('UANG IC');
+        document.getElementById('stok-uang-ic').innerText = `Stok: ${stok['UANG IC']}`;
+      } else {
+        btnUangIC.disabled = true;
+        btnUangIC.classList.add('out-of-stock');
+        btnUangIC.innerText = 'Stok Habis';
+        document.getElementById('stok-uang-ic').innerText = `Stok: 0`;
+      }
+
+      // UANG IC VIA LOGIN
+      if (stok['UANG IC VIA LOGIN'] > 0) {
+        btnUangICLogin.onclick = () => goToPayment('UANG IC VIA LOGIN');
+        document.getElementById('stok-uang-ic-login').innerText = `Stok: ${stok['UANG IC VIA LOGIN']}`;
+      } else {
+        btnUangICLogin.disabled = true;
+        btnUangICLogin.classList.add('out-of-stock');
+        btnUangICLogin.innerText = 'Stok Habis';
+        document.getElementById('stok-uang-ic-login').innerText = `Stok: 0`;
+      }
     }
+
+    function goToPayment(productName) {
+      localStorage.setItem('productName', productName);
+      window.location.href = 'payment.html';
+    }
+
+    updateStok();
   </script>
 </body>
 </html>
