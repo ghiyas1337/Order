@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daftar Produk</title>
+  <title>RTM DIMZ | DIASZ</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -12,18 +12,18 @@
     <div class="product-card">
       <h2>UANG IC</h2>
       <p>100K = 10.000 OOC <br> 200K = 20.000 OOC <br> 300K = 30.000 </p>
-      <button onclick="order('Produk A')">Beli</button>
+      <button onclick="order('MAU BELI UIC')">Beli</button>
     </div>
     <div class="product-card">
       <h2>UANG IC VIA LOGIN</h2>
       <p>200K = 20.000 OOC <br> 500K = 40K <br> DAN SETERUSNYA</p>
-      <button onclick="order('Produk B')">Beli</button>
+      <button onclick="order('MAU BELI UIC')">Beli</button>
     </div>
   </div>
 
   <script>
     function order(productName) {
-  const phone = '6282118486096'; // Ganti dengan nomor WA kamu
+  const phone = '6282118486096';
   const message = `Halo! Saya ingin membeli ${productName}`;
   window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     }
