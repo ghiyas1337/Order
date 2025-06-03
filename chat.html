@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat Pembelian</title>
+</head>
+<body>
+  <h1>Chat Pembelian</h1>
+  <div id="chat-box"></div>
+
+  <script>
+    // Ambil nama produk dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const product = urlParams.get('product');
+
+    const chatBox = document.getElementById('chat-box');
+    if (product) {
+      chatBox.innerHTML = `<p>Halo! Saya ingin membeli <strong>${product}</strong>. Bagaimana cara pembeliannya?</p>`;
+    } else {
+      chatBox.innerHTML = `<p>Tidak ada produk yang dipilih.</p>`;
+    }
+  </script>
+</body>
+</html>
