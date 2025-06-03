@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pembayaran</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .qris-section {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .qris-section img {
+      width: 250px;
+      height: auto;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Halaman Pembayaran</h1>
+  <p id="product-info">Memuat data...</p>
+
+  <div class="qris-section">
+    <h2>Scan QRIS untuk Pembayaran</h2>
+    <img src="qris.png" alt="QRIS Pembayaran" />
+    <p>Setelah membayar, klik tombol di bawah untuk mengirim bukti transaksi.</p>
+  </div>
+
+  <button onclick="lanjutKeWA()">Lanjut ke WhatsApp</button>
+
+  <script>
+    const product = localStorage.getItem('productName');
+
+    if (product) {
+      document.getElementById('product-info').innerText = `Produk yang dipilih: ${product}`;
+    } else {
+      document.getElementById('product-info').innerText = 'Tidak ada produk yang dipilih.';
+    }
+
+    function lanjutKeWA() {
+      const phone = '6282118486096';
+      const message = `Halo! Saya sudah membayar dan ingin membeli ${product}`;
+      window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    }
+  </script>
+</body>
+</html>
