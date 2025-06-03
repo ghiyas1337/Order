@@ -262,7 +262,12 @@
   <script>
     const stok = {
       'UANG IC': 3,
-      'UANG IC VIA LOGIN': 0
+      'UANG IC VIA LOGIN': 0,
+      'De': 999,
+      'Slc': 999,
+      'Rif': 999,
+      'sg': 999,
+      'AK': 999,
     };
 
     function updateStok() {
@@ -289,7 +294,7 @@
         document.getElementById('stok-uang-ic-login').innerText = `Stok: 0`;
       }
       // Dessert Eagle
-if (stok['Dessert Eagle'] > 0) {
+if (stok['De'] > 0) {
   document.getElementById('senjata1').onclick = () => goToPayment('Dessert Eagle');
   document.getElementById('senjata-1').innerText = `Stok: ${stok['Dessert Eagle']}`;
 } else {
@@ -301,7 +306,7 @@ if (stok['Dessert Eagle'] > 0) {
 }
 
 // Silenced Pistol
-if (stok['Silenced Pistol'] > 0) {
+if (stok['Slc'] > 0) {
   document.getElementById('senjata2').onclick = () => goToPayment('Silenced Pistol');
   document.getElementById('senjata-2').innerText = `Stok: ${stok['Silenced Pistol']}`;
 } else {
@@ -313,7 +318,7 @@ if (stok['Silenced Pistol'] > 0) {
 }
 
 // Riffle
-if (stok['Riffle'] > 0) {
+if (stok['Rif'] > 0) {
   document.getElementById('senjata3').onclick = () => goToPayment('Riffle');
   document.getElementById('senjata-3').innerText = `Stok: ${stok['Riffle']}`;
 } else {
@@ -325,7 +330,7 @@ if (stok['Riffle'] > 0) {
 }
 
 // Shoutgun
-if (stok['Shoutgun'] > 0) {
+if (stok['sg'] > 0) {
   document.getElementById('senjata4').onclick = () => goToPayment('Shoutgun');
   document.getElementById('senjata-4').innerText = `Stok: ${stok['Shoutgun']}`;
 } else {
@@ -337,7 +342,7 @@ if (stok['Shoutgun'] > 0) {
 }
 
 // AK47
-if (stok['AK47'] > 0) {
+if (stok['AK'] > 0) {
   document.getElementById('senjata5').onclick = () => goToPayment('AK47');
   document.getElementById('senjata-5').innerText = `Stok: ${stok['AK47']}`;
 } else {
