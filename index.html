@@ -288,6 +288,65 @@
         btnUangICLogin.innerText = 'Stok Habis';
         document.getElementById('stok-uang-ic-login').innerText = `Stok: 0`;
       }
+      // Dessert Eagle
+if (stok['Dessert Eagle'] > 0) {
+  document.getElementById('senjata1').onclick = () => goToPayment('Dessert Eagle');
+  document.getElementById('senjata-1').innerText = `Stok: ${stok['Dessert Eagle']}`;
+} else {
+  const btn = document.getElementById('senjata1');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('senjata-1').innerText = `Stok: 0`;
+}
+
+// Silenced Pistol
+if (stok['Silenced Pistol'] > 0) {
+  document.getElementById('senjata2').onclick = () => goToPayment('Silenced Pistol');
+  document.getElementById('senjata-2').innerText = `Stok: ${stok['Silenced Pistol']}`;
+} else {
+  const btn = document.getElementById('senjata2');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('senjata-2').innerText = `Stok: 0`;
+}
+
+// Riffle
+if (stok['Riffle'] > 0) {
+  document.getElementById('senjata3').onclick = () => goToPayment('Riffle');
+  document.getElementById('senjata-3').innerText = `Stok: ${stok['Riffle']}`;
+} else {
+  const btn = document.getElementById('senjata3');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('senjata-3').innerText = `Stok: 0`;
+}
+
+// Shoutgun
+if (stok['Shoutgun'] > 0) {
+  document.getElementById('senjata4').onclick = () => goToPayment('Shoutgun');
+  document.getElementById('senjata-4').innerText = `Stok: ${stok['Shoutgun']}`;
+} else {
+  const btn = document.getElementById('senjata4');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('senjata-4').innerText = `Stok: 0`;
+}
+
+// AK47
+if (stok['AK47'] > 0) {
+  document.getElementById('senjata5').onclick = () => goToPayment('AK47');
+  document.getElementById('senjata-5').innerText = `Stok: ${stok['AK47']}`;
+} else {
+  const btn = document.getElementById('senjata5');
+  btn.disabled = true;
+  btn.classList.add('out-of-stock');
+  btn.innerText = 'Stok Habis';
+  document.getElementById('senjata-5').innerText = `Stok: 0`;
+}
     }
 
     function goToPayment(productName) {
