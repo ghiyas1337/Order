@@ -191,15 +191,34 @@
     <div class="product-list hidden" id="senjata-section">
       <div class="product-card">
         <h2>Dessert Eagle</h2>
-        <p>300 AMMO = 10.000 OOC</p>
+        <p>300 AMMO = 10.000 OOC<br> 1K AMMO = 20K OOC<br> 3K AMMO = 50.000 00C <br> DAN SETERUSNYA</p>
         <button id="senjata1">Beli</button>
         <p id="senjata-1"></p>
       </div>
       <div class="product-card">
         <h2>Silenced Pistol</h2>
-        <p>700 AMMO = 10.000 OOC</p>
+        <p>700AMMO = 10.000 OOC <br> 2K AMMO = 20.000 OOC <br> 5K AMMO = 50.000 OOC <BR> DAN SETERUSNYA</p>
         <button id="senjata2">Beli</button>
         <p id="senjata-2"></p>
+      </div>
+      </div>
+      <div class="product-card">
+        <h2>Riffle</h2>
+        <p>500 AMMO = 10.000 OOC<br> 1K AMMO = 20K OOC<br> 3K AMMO = 50.000 OOC <BR> DAN SETERUSNYA</p>
+        <button id="senjata3">Beli</button>
+        <p id="senjata-3"></p>
+      </div>
+    <div class="product-card">
+        <h2>Shoutgun</h2>
+        <p>300 AMMO = 10.000 OOC <br> 1K AMMO = 20.000 OOC<br> 3K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
+        <button id="senjata4">Beli</button>
+        <p id="senjata-4"></p>
+      </div>
+<div class="product-card">
+        <h2>AK47</h2>
+        <p>300 AMMO = 10.000 OOC <br> 1K AMMO = 20.000 OOC<br> 3K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
+        <button id="senjata5">Beli</button>
+        <p id="senjata-5"></p>
       </div>
     </div>
 
@@ -217,17 +236,39 @@
         <button id="item-marjun">Beli</button>
         <p id="stok-marjun"></p>
       </div>
+      <div class="product-card">
+  <h2>Perban</h2>
+  <p>150 PERBAN = 10.000 OOC<br>350 PERBAN = 20.000 OOC</p>
+  <button id="item-perban">Beli</button>
+  <p id="stok-perban"></p>
+</div>
+      <div class="product-card">
+  <h2>Pil Stress</h2>
+  <p>100 PIL = 10.000 OOC<br>220 PIL = 20.000 OOC</p>
+  <button id="item-pil">Beli</button>
+  <p id="stok-pil"></p>
+</div>
+      <div class="product-card">
+  <h2>Makan & Minum</h2>
+  <p>500 MAKAN + 500 MINUM = 10K OOC</p>
+  <button id="item-makanminum">Beli</button>
+  <p id="stok-makanminum"></p>
+</div>
     </div>
   </main>
 
   <script>
     const stok = {
-      'UANG IC': 3,
-      'UANG IC VIA LOGIN': 0,
-      'De': 5,
-      'Slc': 2,
-      'Kevlar': 20,
-      'Marjun': 50
+      'De': 10000,
+  'Slc': 10000,
+  'Rif': 10000,
+  'sg': 10000,
+  'AK': 10000,
+  'Kevlar': 50,
+  'Marjun': 100,
+  'Perban': 75,
+  'Pil': 120,
+  'Makan minum': 200
     };
 
     function updateStok() {
@@ -251,8 +292,14 @@
       toggle('uicvilog', 'UANG IC VIA LOGIN', 'stok-uang-ic-login', 'UANG IC VIA LOGIN');
       toggle('senjata1', 'De', 'senjata-1', 'Dessert Eagle');
       toggle('senjata2', 'Slc', 'senjata-2', 'Silenced Pistol');
+      toggle('senjata3', 'Rif', 'senjata-3', 'Riffle');
+      toggle('senjata4', 'sg', 'senjata-4', 'Sg');
+      toggle('senjata5', 'AK', 'senjata-5', 'AK47');
       toggle('item-kevlar', 'Kevlar', 'stok-kevlar', 'Kevlar');
       toggle('item-marjun', 'Marjun', 'stok-marjun', 'Marjun');
+      toggle('item-perban', 'Perban', 'stok-perban', 'Perban');
+      toggle('item-pil', 'Pil', 'stok-pil', 'Pill Stress');
+      toggle('item-makanminum', 'Makan minum', 'stok-makanminum', 'Makan Minum');
     }
 
     function goToPayment(productName) {
