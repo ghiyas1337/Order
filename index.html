@@ -23,6 +23,7 @@
       padding: 40px 20px;
       text-align: center;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      position: relative;
     }
 
     header h1 {
@@ -46,6 +47,36 @@
     .dimz {
       color: #ffaa00;
       text-shadow: 0 0 8px #ffaa00;
+    }
+
+    /* MENU NAV DI SEBELAH KANAN HEADER */
+    nav.menu-header {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 15px;
+    }
+
+    nav.menu-header a {
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: #111;
+      box-shadow: 0 0 6px rgba(255 255 255 / 0.3);
+      transition: background 0.3s ease;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    nav.menu-header a:hover {
+      background: #00fff2;
+      color: #000;
+      text-shadow: none;
+      box-shadow: 0 0 10px #00fff2;
     }
 
     /* MAIN AREA PUTIH */
@@ -122,6 +153,12 @@
       color: #777;
     }
 
+    /* BAGIAN UNTUK SCROLL TARGET */
+    #uic-section, #senjata-section, #item-section {
+      scroll-margin-top: 100px; /* supaya saat scroll pas di bawah header */
+    }
+
+    /* Responsive */
     @media (max-width: 600px) {
       .product-card {
         width: 90%;
@@ -129,6 +166,19 @@
 
       header h1 {
         font-size: 2.5rem;
+      }
+
+      nav.menu-header {
+        position: static;
+        transform: none;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 10px;
+      }
+
+      nav.menu-header a {
+        font-size: 0.9rem;
+        padding: 8px 12px;
       }
     }
   </style>
@@ -140,13 +190,20 @@
       <span class="rtm">RTM</span> <span class="diasz">DIASZ</span> | 
       <span class="dimz">DIMZ</span>
     </h1>
+
+    <!-- Menu navigasi di kanan atas header -->
+    <nav class="menu-header">
+      <a href="#uic-section">UIC</a>
+      <a href="#senjata-section">Senjata</a>
+      <a href="#item-section">Item</a>
+    </nav>
   </header>
 
   <main>
-    <div class="product-list">
+    <div class="product-list" id="uic-section">
       <div class="product-card">
         <h2>UANG IC</h2>
-        <p>100K = 10.000 OOC <br> 200K = 20.000 OOC <br> 300K = 30.000 OOC <BR> DAN SETERUSNYA</p>
+        <p>100K = 10.000 OOC <br> 200K = 20.000 OOC <br> 300K = 30.000 OOC <br> DAN SETERUSNYA</p>
         <button id="uic">Beli</button>
         <p id="stok-uang-ic"></p>
       </div>
@@ -156,6 +213,9 @@
         <button id="uicvilog">Beli</button>
         <p id="stok-uang-ic-login"></p>
       </div>
+    </div>
+
+    <div class="product-list" id="senjata-section" style="margin-top: 50px;">
       <div class="product-card">
         <h2>Dessert Eagle</h2>
         <p>300 AMMO = 10.000 OOC<br> 1K AMMO = 20K OOC<br> 3K AMMO = 50.000 00C <br> DAN SETERUSNYA</p>
@@ -164,13 +224,13 @@
       </div>
       <div class="product-card">
         <h2>Silenced Pistol</h2>
-        <p>700AMMO = 10.000 OOC <br> 2K AMMO = 20.000 OOC <br> 5K AMMO = 50.000 OOC <BR> DAN SETERUSNYA</p>
+        <p>700AMMO = 10.000 OOC <br> 2K AMMO = 20.000 OOC <br> 5K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
         <button id="senjata2">Beli</button>
         <p id="senjata-2"></p>
       </div>
       <div class="product-card">
         <h2>Riffle</h2>
-        <p>500 AMMO = 10.000 OOC<br> 1K AMMO = 20K OOC<br> 3K AMMO = 50.000 OOC <BR> DAN SETERUSNYA</p>
+        <p>500 AMMO = 10.000 OOC<br> 1K AMMO = 20K OOC<br> 3K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
         <button id="senjata3">Beli</button>
         <p id="senjata-3"></p>
       </div>
@@ -185,6 +245,16 @@
         <p>300 AMMO = 10.000 OOC <br> 1K AMMO = 20.000 OOC<br> 3K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
         <button id="senjata5">Beli</button>
         <p id="senjata-5"></p>
+      </div>
+    </div>
+
+    <div class="product-list" id="item-section" style="margin-top: 50px;">
+      <!-- Tambahkan produk "Item" di sini kalau ada -->
+      <div class="product-card">
+        <h2>Contoh Item</h2>
+        <p>Deskripsi item contoh dan harga</p>
+        <button id="item1">Beli</button>
+        <p id="item-1"></p>
       </div>
     </div>
   </main>
