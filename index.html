@@ -17,7 +17,6 @@
       color: #111;
     }
 
-    /* HEADER POLIS HITAM */
     header {
       background-color: #000;
       padding: 40px 20px;
@@ -33,23 +32,10 @@
       letter-spacing: 0.1em;
     }
 
-    /* Warna beda untuk tiap span */
-    .rtm {
-      color: #00fff2;
-      text-shadow: 0 0 8px #00fff2;
-    }
+    .rtm { color: #00fff2; text-shadow: 0 0 8px #00fff2; }
+    .diasz { color: #ff4dff; text-shadow: 0 0 8px #ff4dff; }
+    .dimz { color: #ffaa00; text-shadow: 0 0 8px #ffaa00; }
 
-    .diasz {
-      color: #ff4dff;
-      text-shadow: 0 0 8px #ff4dff;
-    }
-
-    .dimz {
-      color: #ffaa00;
-      text-shadow: 0 0 8px #ffaa00;
-    }
-
-    /* MENU NAV DI SEBELAH KANAN HEADER */
     nav.menu-header {
       position: absolute;
       top: 50%;
@@ -66,25 +52,22 @@
       padding: 10px 15px;
       border-radius: 8px;
       background: #111;
-      box-shadow: 0 0 6px rgba(255 255 255 / 0.3);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
       transition: background 0.3s ease;
       font-size: 1rem;
-      cursor: pointer;
     }
 
-    nav.menu-header a:hover {
+    nav.menu-header a:hover,
+    nav.menu-header a.active {
       background: #00fff2;
       color: #000;
-      text-shadow: none;
       box-shadow: 0 0 10px #00fff2;
     }
 
-    /* MAIN AREA PUTIH */
     main {
       background-color: #fff;
       min-height: 100vh;
       padding: 50px 20px;
-      color: #111;
     }
 
     .product-list {
@@ -121,7 +104,6 @@
       font-size: 1rem;
       color: #444;
       margin-bottom: 20px;
-      line-height: 1.5;
     }
 
     button {
@@ -146,19 +128,10 @@
       cursor: not-allowed;
     }
 
-    #stok-uang-ic,
-    #stok-uang-ic-login {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #777;
+    .hidden {
+      display: none !important;
     }
 
-    /* BAGIAN UNTUK SCROLL TARGET */
-    #uic-section, #senjata-section, #item-section {
-      scroll-margin-top: 100px; /* supaya saat scroll pas di bawah header */
-    }
-
-    /* Responsive */
     @media (max-width: 600px) {
       .product-card {
         width: 90%;
@@ -190,272 +163,93 @@
       <span class="rtm">RTM</span> <span class="diasz">DIASZ</span> | 
       <span class="dimz">DIMZ</span>
     </h1>
-
-    <!-- Menu navigasi di kanan atas header -->
     <nav class="menu-header">
-      <a href="#uic-section">UIC</a>
+      <a href="#uic-section" class="active">UIC</a>
       <a href="#senjata-section">Senjata</a>
       <a href="#item-section">Item</a>
     </nav>
   </header>
 
   <main>
+    <!-- UIC SECTION -->
     <div class="product-list" id="uic-section">
       <div class="product-card">
         <h2>UANG IC</h2>
-        <p>100K = 10.000 OOC <br> 200K = 20.000 OOC <br> 300K = 30.000 OOC <br> DAN SETERUSNYA</p>
+        <p>100K = 10.000 OOC <br> 200K = 20.000 OOC</p>
         <button id="uic">Beli</button>
         <p id="stok-uang-ic"></p>
       </div>
       <div class="product-card">
         <h2>UANG IC VIA LOGIN</h2>
-        <p>200K = 20.000 OOC<br> 500K = 40.000 OOC<br> DAN SETERUSNYA</p>
+        <p>200K = 20.000 OOC<br> 500K = 40.000 OOC</p>
         <button id="uicvilog">Beli</button>
         <p id="stok-uang-ic-login"></p>
       </div>
     </div>
 
-    <div class="product-list" id="senjata-section" style="margin-top: 50px;">
+    <!-- SENJATA SECTION -->
+    <div class="product-list hidden" id="senjata-section">
       <div class="product-card">
         <h2>Dessert Eagle</h2>
-        <p>300 AMMO = 10.000 OOC<br> 1K AMMO = 20K OOC<br> 3K AMMO = 50.000 00C <br> DAN SETERUSNYA</p>
+        <p>300 AMMO = 10.000 OOC</p>
         <button id="senjata1">Beli</button>
         <p id="senjata-1"></p>
       </div>
       <div class="product-card">
         <h2>Silenced Pistol</h2>
-        <p>700AMMO = 10.000 OOC <br> 2K AMMO = 20.000 OOC <br> 5K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
+        <p>700 AMMO = 10.000 OOC</p>
         <button id="senjata2">Beli</button>
         <p id="senjata-2"></p>
       </div>
-      <div class="product-card">
-        <h2>Riffle</h2>
-        <p>500 AMMO = 10.000 OOC<br> 1K AMMO = 20K OOC<br> 3K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
-        <button id="senjata3">Beli</button>
-        <p id="senjata-3"></p>
-      </div>
-      <div class="product-card">
-        <h2>Shoutgun</h2>
-        <p>300 AMMO = 10.000 OOC <br> 1K AMMO = 20.000 OOC<br> 3K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
-        <button id="senjata4">Beli</button>
-        <p id="senjata-4"></p>
-      </div>
-      <div class="product-card">
-        <h2>AK47</h2>
-        <p>300 AMMO = 10.000 OOC <br> 1K AMMO = 20.000 OOC<br> 3K AMMO = 50.000 OOC <br> DAN SETERUSNYA</p>
-        <button id="senjata5">Beli</button>
-        <p id="senjata-5"></p>
-      </div>
-      <div class="product-card">
-  <h2>Kevlar</h2>
-  <p>40 KEVLAR = 10K OOC<br>90 KEVLAR = 20K OOC</p>
-  <button id="item-kevlar">Beli</button>
-  <p id="stok-kevlar"></p>
-</div>
-<div class="product-card">
-  <h2>Marjun</h2>
-  <p>150 MARJUN = 10K OOC<br>350 MARJUN = 20K OOC</p>
-  <button id="item-marjun">Beli</button>
-  <p id="stok-marjun"></p>
-</div>
-<div class="product-card">
-  <h2>Perban</h2>
-  <p>150 PERBAN = 10K OOC<br>350 PERBAN = 20K OOC</p>
-  <button id="item-perban">Beli</button>
-  <p id="stok-perban"></p>
-</div>
-<div class="product-card">
-  <h2>Pil Stress</h2>
-  <p>100 PIL = 10K OOC<br>220 PIL = 20K OOC</p>
-  <button id="item-pil">Beli</button>
-  <p id="stok-pil"></p>
-</div>
-<div class="product-card">
-  <h2>Makan & Minum</h2>
-  <p>500 MAKAN + 500 MINUM = 10K OOC</p>
-  <button id="item-makanminum">Beli</button>
-  <p id="stok-makanminum"></p>
-</div>
     </div>
 
-    <div class="product-list" id="item-section" style="margin-top: 50px;">
-      <!-- Tambahkan produk "Item" di sini kalau ada -->
+    <!-- ITEM SECTION -->
+    <div class="product-list hidden" id="item-section">
       <div class="product-card">
-        <h2>Contoh Item</h2>
-        <p>Deskripsi item contoh dan harga</p>
-        <button id="item1">Beli</button>
-        <p id="item-1"></p>
+        <h2>Kevlar</h2>
+        <p>40 KEVLAR = 10K OOC</p>
+        <button id="item-kevlar">Beli</button>
+        <p id="stok-kevlar"></p>
+      </div>
+      <div class="product-card">
+        <h2>Marjun</h2>
+        <p>150 MARJUN = 10K OOC</p>
+        <button id="item-marjun">Beli</button>
+        <p id="stok-marjun"></p>
       </div>
     </div>
   </main>
 
   <script>
-  const stok = {
-  'UANG IC': 3,
-  'UANG IC VIA LOGIN': 0,
-  'De': 99,
-  'Slc': 99,
-  'Rif': 999,
-  'sg': 99,
-  'AK': 99,
-  'Kevlar': 50,
-  'Marjun': 100,
-  'Perban': 75,
-  'Pil': 120,
-  'MakanMinum': 200
-};
+    const stok = {
+      'UANG IC': 3,
+      'UANG IC VIA LOGIN': 0,
+      'De': 5,
+      'Slc': 2,
+      'Kevlar': 20,
+      'Marjun': 50
+    };
 
     function updateStok() {
-      const btnUangIC = document.getElementById('uic');
-      const btnUangICLogin = document.getElementById('uicvilog');
+      const toggle = (id, stokKey, labelId, name) => {
+        const btn = document.getElementById(id);
+        const stokVal = stok[stokKey];
+        const p = document.getElementById(labelId);
 
-      if (stok['UANG IC'] > 0) {
-        btnUangIC.onclick = () => goToPayment('UANG IC');
-        document.getElementById('stok-uang-ic').innerText = `Stok: ${stok['UANG IC']}`;
-      } else {
-        btnUangIC.disabled = true;
-        btnUangIC.classList.add('out-of-stock');
-        btnUangIC.innerText = 'Stok Habis';
-        document.getElementById('stok-uang-ic').innerText = `Stok: 0`;
-      }
+        if (stokVal > 0) {
+          btn.onclick = () => goToPayment(name);
+          p.innerText = `Stok: ${stokVal}`;
+        } else {
+          btn.disabled = true;
+          btn.classList.add('out-of-stock');
+          btn.innerText = 'Stok Habis';
+          p.innerText = `Stok: 0`;
+        }
+      };
 
-      if (stok['UANG IC VIA LOGIN'] > 0) {
-        btnUangICLogin.onclick = () => goToPayment('UANG IC VIA LOGIN');
-        document.getElementById('stok-uang-ic-login').innerText = `Stok: ${stok['UANG IC VIA LOGIN']}`;
-      } else {
-        btnUangICLogin.disabled = true;
-        btnUangICLogin.classList.add('out-of-stock');
-        btnUangICLogin.innerText = 'Stok Habis';
-        document.getElementById('stok-uang-ic-login').innerText = `Stok: 0`;
-      }
-      // Dessert Eagle
-if (stok['De'] > 0) {
-  document.getElementById('senjata1').onclick = () => goToPayment('Dessert Eagle');
-  document.getElementById('senjata-1').innerText = `Stok: ${stok['De']}`;
-} else {
-  const btn = document.getElementById('senjata1');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('senjata-1').innerText = `Stok: 0`;
-}
-
-// Silenced Pistol
-if (stok['Slc'] > 0) {
-  document.getElementById('senjata2').onclick = () => goToPayment('Silenced Pistol');
-  document.getElementById('senjata-2').innerText = `Stok: ${stok['Slc']}`;
-} else {
-  const btn = document.getElementById('senjata2');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('senjata-2').innerText = `Stok: 0`;
-}
-
-// Riffle
-if (stok['Rif'] > 0) {
-  document.getElementById('senjata3').onclick = () => goToPayment('Riffle');
-  document.getElementById('senjata-3').innerText = `Stok: ${stok['Rif']}`;
-} else {
-  const btn = document.getElementById('senjata3');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('senjata-3').innerText = `Stok: 0`;
-}
-
-// Shoutgun
-if (stok['sg'] > 0) {
-  document.getElementById('senjata4').onclick = () => goToPayment('Shoutgun');
-  document.getElementById('senjata-4').innerText = `Stok: ${stok['sg']}`;
-} else {
-  const btn = document.getElementById('senjata4');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('senjata-4').innerText = `Stok: 0`;
-}
-
-// AK47
-if (stok['AK'] > 0) {
-  document.getElementById('senjata5').onclick = () => goToPayment('AK47');
-  document.getElementById('senjata-5').innerText = `Stok: ${stok['AK']}`;
-} else {
-  const btn = document.getElementById('senjata5');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('senjata-5').innerText = `Stok: 0`;
-}
-      // Kevlar
-if (stok['Kevlar'] > 0) {
-  document.getElementById('item-kevlar').onclick = () => goToPayment('Kevlar');
-  document.getElementById('stok-kevlar').innerText = `Stok: ${stok['Kevlar']}`;
-} else {
-  const btn = document.getElementById('item-kevlar');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('stok-kevlar').innerText = 'Stok: 0';
-}
-
-// Marjun
-if (stok['Marjun'] > 0) {
-  document.getElementById('item-marjun').onclick = () => goToPayment('Marjun');
-  document.getElementById('stok-marjun').innerText = `Stok: ${stok['Marjun']}`;
-} else {
-  const btn = document.getElementById('item-marjun');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('stok-marjun').innerText = 'Stok: 0';
-}
-
-// Perban
-if (stok['Perban'] > 0) {
-  document.getElementById('item-perban').onclick = () => goToPayment('Perban');
-  document.getElementById('stok-perban').innerText = `Stok: ${stok['Perban']}`;
-} else {
-  const btn = document.getElementById('item-perban');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('stok-perban').innerText = 'Stok: 0';
-}
-
-// Pil Stress
-if (stok['Pil'] > 0) {
-  document.getElementById('item-pil').onclick = () => goToPayment('Pil Stress');
-  document.getElementById('stok-pil').innerText = `Stok: ${stok['Pil']}`;
-} else {
-  const btn = document.getElementById('item-pil');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('stok-pil').innerText = 'Stok: 0';
-}
-
-// Makan & Minum
-if (stok['MakanMinum'] > 0) {
-  document.getElementById('item-makanminum').onclick = () => goToPayment('Makan & Minum');
-  document.getElementById('stok-makanminum').innerText = `Stok: ${stok['MakanMinum']}`;
-} else {
-  const btn = document.getElementById('item-makanminum');
-  btn.disabled = true;
-  btn.classList.add('out-of-stock');
-  btn.innerText = 'Stok Habis';
-  document.getElementById('stok-makanminum').innerText = 'Stok: 0';
-}
-    }
-
-    function goToPayment(productName) {
-      localStorage.setItem('productName', productName);
-      window.location.href = 'payment.html';
-    }
-
-    updateStok();
-  </script>
-
-</body>
-</html>
-
+      toggle('uic', 'UANG IC', 'stok-uang-ic', 'UANG IC');
+      toggle('uicvilog', 'UANG IC VIA LOGIN', 'stok-uang-ic-login', 'UANG IC VIA LOGIN');
+      toggle('senjata1', 'De', 'senjata-1', 'Dessert Eagle');
+      toggle('senjata2', 'Slc', 'senjata-2', 'Silenced Pistol');
+      toggle('item-kevlar', 'Kevlar', 'stok-kevlar', 'Kevlar');
+      toggle('item-marjun', 'Marjun', 'stok-marjun', 'Mar
