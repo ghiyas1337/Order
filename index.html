@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RTM DIMZ | DIASZ</title>
   <style>
     * {
@@ -13,45 +13,47 @@
     }
 
     body {
-      background-color: #121212;
-      color: #fff;
+      background-color: #fff;
+      color: #111;
     }
 
-    /* HEADER TERPISAH */
+    /* HEADER POLIS HITAM */
     header {
-      background: linear-gradient(to right, #00ffd5, #ff00c8, #ffaa00);
+      background-color: #000;
       padding: 40px 20px;
       text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
 
     header h1 {
       font-size: 3rem;
-      font-weight: bold;
+      font-weight: 900;
       color: white;
-      text-shadow: 0 0 15px #ffffff;
+      letter-spacing: 0.1em;
     }
 
+    /* Warna beda untuk tiap span */
     .rtm {
       color: #00fff2;
-      text-shadow: 0 0 10px #00fff2;
+      text-shadow: 0 0 8px #00fff2;
     }
 
     .diasz {
       color: #ff4dff;
-      text-shadow: 0 0 10px #ff4dff;
+      text-shadow: 0 0 8px #ff4dff;
     }
 
     .dimz {
       color: #ffaa00;
-      text-shadow: 0 0 10px #ffaa00;
+      text-shadow: 0 0 8px #ffaa00;
     }
 
-    /* AREA PRODUK */
+    /* MAIN AREA PUTIH */
     main {
-      background: linear-gradient(135deg, #1f1f1f, #292929);
+      background-color: #fff;
       min-height: 100vh;
-      padding: 40px 20px;
+      padding: 50px 20px;
+      color: #111;
     }
 
     .product-list {
@@ -62,60 +64,62 @@
     }
 
     .product-card {
-      background: #222;
-      border: 2px solid #00ffd5;
+      background: #f5f5f5;
+      border: 2px solid #ddd;
       border-radius: 12px;
       width: 280px;
-      padding: 20px;
+      padding: 25px;
       text-align: center;
-      box-shadow: 0 0 20px rgba(0, 255, 213, 0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
     }
 
     .product-card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 30px rgba(0, 255, 213, 0.4);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transform: translateY(-5px);
+      border-color: #00fff2;
     }
 
     .product-card h2 {
-      font-size: 1.4rem;
-      color: #00ffd5;
-      margin-bottom: 12px;
+      font-size: 1.5rem;
+      color: #00bbb9;
+      margin-bottom: 15px;
     }
 
     .product-card p {
-      font-size: 0.95rem;
-      color: #eee;
-      margin-bottom: 16px;
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 20px;
       line-height: 1.5;
     }
 
     button {
-      background-color: #00ffd5;
-      color: #000;
-      padding: 10px 20px;
-      font-weight: bold;
+      background-color: #00bbb9;
+      color: white;
+      padding: 12px 26px;
+      font-weight: 700;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
+      font-size: 1rem;
     }
 
     button:hover:not(:disabled) {
-      background-color: #00cbb3;
+      background-color: #009b98;
     }
 
     button.out-of-stock {
-      background-color: #555;
-      color: #aaa;
+      background-color: #ccc;
+      color: #888;
       cursor: not-allowed;
     }
 
     #stok-uang-ic,
     #stok-uang-ic-login {
-      margin-top: 8px;
-      font-size: 0.85rem;
-      color: #ccc;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #777;
     }
 
     @media (max-width: 600px) {
@@ -124,22 +128,20 @@
       }
 
       header h1 {
-        font-size: 2.3rem;
+        font-size: 2.5rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER TERPISAH -->
   <header>
     <h1>
-      <span class="rtm">RTM</span> <span class="diasz">DIASZ</span> |
+      <span class="rtm">RTM</span> <span class="diasz">DIASZ</span> | 
       <span class="dimz">DIMZ</span>
     </h1>
   </header>
 
-  <!-- AREA PRODUK -->
   <main>
     <div class="product-list">
       <div class="product-card">
@@ -195,5 +197,7 @@
 
     updateStok();
   </script>
+
 </body>
 </html>
+
