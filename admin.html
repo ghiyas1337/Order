@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin - Bukti Transfer</title>
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #50e3c2;
+      --background-color: #f7f9fc;
+      --text-color: #333;
+      --button-bg: linear-gradient(45deg, #4a90e2, #50e3c2);
+      --button-hover-bg: linear-gradient(45deg, #357abd, #39c9a5);
+      --border-radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background: var(--background-color);
+      color: var(--text-color);
+      padding: 2rem 1rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: white;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .admin-section {
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      padding: 1rem 1.5rem;
+      background: #fafafa;
+      box-shadow: inset 0 0 5px #eee;
+    }
+    .admin-section h2 {
+      margin: 0 0 1rem 0;
+      color: var(--secondary-color);
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 0.25rem;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+    .uploads-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .upload-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+      padding: 0.75rem 1rem;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+    .upload-thumbnail {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--border-radius);
+      border: 1px solid #ccc;
+      object-fit: contain;
+      background: #f0f0f0;
+      flex-shrink: 0;
+    }
+    .upload-info {
+      flex-grow: 1;
+      overflow: hidden;
+    }
+    .upload-info strong {
+      display: block;
+      font-size: 1rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 100%;
+      margin-bottom: 0.2rem;
+      color: var(--primary-color);
+    }
+    .upload-info small {
+      color: #666;
+      font-size: 0.875rem;
+    }
+    .delete-btn {
+      background: #e74c3c;
+      border: none;
+      color: white;
+      border-radius: var(--border-radius);
+      padding: 0.5rem 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .delete-btn:hover {
+      background: #c0392b;
+    }
+    .no-uploads {
+      font-style: italic;
+      color: #666;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .clear-btn {
+      background: #f39c12;
+      border: none;
+      color: white;
+      border-radius: var(--border-radius);
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    .clear-btn:hover {
+      background: #d68910;
+    }
+    footer {
+      margin-top: auto;
+      font-size: 0.8rem;
+      color: #888;
+      padding: 1rem 0;
+      text-align: center;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Halaman Admin - Bukti Transfer</h1>
+  <main class="container" role="main" aria-live="polite" aria-atomic="true">
+    <section class="admin-section" id="admin1Section" aria-label="Bukti Transfer Admin 1">
+      <h2>Admin 1</h2>
+      <div class="actions">
+        <button class="clear-btn" data-admin="Admin 1" aria-label="Hapus semua bukti transfer Admin 1">Hapus Semua Bukti Admin 1</button>
+      </div>
+      <div class="uploads-list" id="listAdmin1">
+        <!-- Upload items inserted here -->
+      </div>
+    </section>
+
+    <section class="admin-section" id="admin2Section" aria-label="Bukti Transfer Admin 2">
+      <h2>Admin 2</h2>
+      <div class="actions">
+        <button class="clear-btn" data-admin="Admin 2" aria-label="Hapus semua bukti transfer Admin 2">Hapus Semua Bukti Admin 2</button>
+      </div>
+      <div class="uploads-list" id="listAdmin2">
+        <!-- Upload items inserted here -->
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2024 Halaman Admin Bukti Transfer
+  </footer>
+
+  <script>
+    (function() {
+      const STORAGE_KEY = 'proofUploads';
+
+      const listAdmin1 = document.getElementById('listAdmin1');
+      const listAdmin2 = document.getElementById('listAdmin2');
+      const clearButtons = document.querySelectorAll('.clear-btn');
+
+      // Load uploads from localStorage
+      function loadUploads() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        try {
+          return raw ? JSON.parse(raw) : [];
+        } catch(e) {
+          return [];
+        }
+      }
+
+      // Save uploads to localStorage
+      function saveUploads(uploads) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(uploads));
+      }
+
+      // Create upload item element
+      function createUploadElement(upload) {
+        const item = document.createElement('article');
+        item.className = 'upload-item';
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('aria-label', `Bukti transfer ${upload.filename} untuk ${upload.admin}`);
+
+        const isImage = upload.filetype.startsWith('image/');
+        const thumbnail = document.createElement('img');
+        thumbnail.className = 'upload-thumbnail';
+        if(isImage){
+          thumbnail.src = upload.data;
+          thumbnail.alt = `Preview ${upload.filename}`;
+        } else {
+          // For non-image files, show a generic icon
+          thumbnail.src = 'https://cdn-icons-png.flaticon.com/512/136/136524.png';
+          thumbnail.alt = `File ikon untuk ${upload.filename}`;
+        }
+        item.appendChild(thumbnail);
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'upload-info';
+
+        const filename = document.createElement('strong');
+        filename.textContent = upload.filename;
+        infoDiv.appendChild(filename);
+
+        const date = new Date(upload.id);
+        const dateStr = date.toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+        const datetime = document.createElement('small');
+        datetime.textContent = `Diunggah: ${dateStr}`;
+        infoDiv.appendChild(datetime);
+
+        item.appendChild(infoDiv);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = 'Hapus';
+        deleteBtn.setAttribute('aria-label', `Hapus bukti transfer ${upload.filename}`);
+        deleteBtn.addEventListener('click', () => {
+          if(confirm(`Anda yakin ingin menghapus bukti transfer "${upload.filename}"?`)) {
+            deleteUpload(upload.id);
+          }
+        });
+        item.appendChild(deleteBtn);
+
+        return item;
+      }
+
+      // Render uploads filtered by admin
+      function renderUploads() {
+        const uploads = loadUploads();
+        const admin1Uploads = uploads.filter(u => u.admin === 'Admin 1');
+        const admin2Uploads = uploads.filter(u => u.admin === 'Admin 2');
+
+        listAdmin1.innerHTML = '';
+        listAdmin2.innerHTML = '';
+
+        if(admin1Uploads.length === 0){
+          const noAdmin1 = document.createElement('p');
+          noAdmin1.className = 'no-uploads';
+          noAdmin1.textContent = 'Belum ada bukti transfer untuk Admin 1.';
+          listAdmin1.appendChild(noAdmin1);
+        } else {
+          admin1Uploads.forEach(u => {
+            listAdmin1.appendChild(createUploadElement(u));
+          });
+        }
+
+        if(admin2Uploads.length === 0){
+          const noAdmin2 = document.createElement('p');
+          noAdmin2.className = 'no-uploads';
+          noAdmin2.textContent = 'Belum ada bukti transfer untuk Admin 2.';
+          listAdmin2.appendChild(noAdmin2);
+        } else {
+          admin2Uploads.forEach(u => {
+            listAdmin2.appendChild(createUploadElement(u));
+          });
+        }
+      }
+
+      // Delete upload by id
+      function deleteUpload(id) {
+        let uploads = loadUploads();
+        uploads = uploads.filter(u => u.id !== id);
+        saveUploads(uploads);
+        renderUploads();
+      }
+
+      // Clear all uploads for specific admin
+      function clearUploadsForAdmin(admin) {
+        if(confirm(`Anda yakin ingin menghapus semua bukti transfer untuk ${admin}?`)) {
+          let uploads = loadUploads();
+          uploads = uploads.filter(u => u.admin !== admin);
+          saveUploads(uploads);
+          renderUploads();
+        }
+      }
+
+      // Attach event listeners for clear all buttons
+      clearButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const admin = btn.getAttribute('data-admin');
+          clearUploadsForAdmin(admin);
+        });
+      });
+
+      // Initial render
+      renderUploads();
+    })();
+  </script>
+</body>
+</html>
