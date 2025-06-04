@@ -46,10 +46,10 @@
       toggle('item-perban', 'Perban', 'stok-perban', 'Perban');
       toggle('item-pil', 'Pil', 'stok-pil', 'Pill Stress');
       toggle('item-makanminum', 'Makan minum', 'stok-makanminum', 'Makan Minum');
-      toggle('item-sotot1', 'Paket Sotot 1', 'stock-sotot1', 'Paket Sotot 1');
-      toggle('item-sotot2', 'Paket Sotot 2', 'stock-sotot2', 'Paket Sotot 2');
-      toggle('item-sotot3', 'Paket Sotot 3', 'stock-sotot3', 'Paket Sotot 3');
-      toggle('item-sotot4', 'Paket Sotot Sultan', 'stock-sotot4', 'Paket Sotot Sultan');
+      toggle('item-sotot1', 'Paket Sotot 1', 'stok-sotot1', 'Paket Sotot 1');
+      toggle('item-sotot2', 'Paket Sotot 2', 'stok-sotot2', 'Paket Sotot 2');
+      toggle('item-sotot3', 'Paket Sotot 3', 'stok-sotot3', 'Paket Sotot 3');
+      toggle('item-sotot4', 'Paket Sotot Sultan', 'stok-sotot4', 'Paket Sotot Sultan');
     }
 
     function goToPayment(productName) {
