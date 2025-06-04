@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Payment with QRIS</title>
+  <title>Halaman Pembayaran RTM</title>
   <style>
     :root {
       --primary-color: #4a90e2;
@@ -12,6 +12,8 @@
       --text-color: #333;
       --button-bg: linear-gradient(45deg, #4a90e2, #50e3c2);
       --button-hover-bg: linear-gradient(45deg, #357abd, #39c9a5);
+      --button-whatsapp-bg: #25d366;
+      --button-whatsapp-hover-bg: #1ebe57;
       --border-radius: 8px;
       --shadow: 0 4px 12px rgba(0,0,0,0.1);
       --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -65,12 +67,12 @@
       width: 100%;
       box-sizing: border-box;
       font-weight: 600;
+      user-select: none;
     }
     button {
       background: var(--button-bg);
       color: white;
       box-shadow: var(--shadow);
-      user-select: none;
     }
     button:hover:not(:disabled) {
       background: var(--button-hover-bg);
@@ -108,6 +110,19 @@
       text-align: center;
       width: 100%;
     }
+    .success-message {
+      margin-top: 1rem;
+      color: green;
+      font-weight: 600;
+      text-align: center;
+    }
+    .whatsapp-btn {
+      background: var(--button-whatsapp-bg);
+      margin-top: 0.5rem;
+    }
+    .whatsapp-btn:hover:not(:disabled) {
+      background: var(--button-whatsapp-hover-bg);
+    }
   </style>
 </head>
 <body>
@@ -125,15 +140,18 @@
     <label for="adminSelect" style="margin-top:1rem; font-weight:600;">Pilih Admin untuk kirim bukti transfer:</label>
     <select id="adminSelect" aria-describedby="adminHelp" aria-required="true">
       <option value="" disabled selected>Pilih Admin</option>
-      <option value="6282118486096">Admin Diasz</option>
-      <option value="6283879722648">Admin Dimz</option>
+      <option value="Admin 1" data-phone="6281234567890">Admin 1</option>
+      <option value="Admin 2" data-phone="6281098765432">Admin 2</option>
     </select>
-    <p id="adminHelp" class="note">Bukti transfer akan dikirim ke WhatsApp Admin yang dipilih</p>
+    <p id="adminHelp" class="note">Bukti transfer akan diteruskan ke Admin yang dipilih di halaman admin atau dikirim ke WhatsApp.</p>
 
     <label for="fileInput" style="margin-top:1rem; font-weight:600;">Upload Bukti Transfer (gambar/file):</label>
     <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" aria-required="true" />
 
-    <button id="sendBtn" disabled aria-label="Kirim bukti transfer via WhatsApp">Kirim Bukti ke WhatsApp</button>
+    <button id="submitBtn" disabled aria-label="Kirim bukti transfer ke admin.html">Kirim Bukti ke Admin</button>
+    <button id="whatsappBtn" class="whatsapp-btn" disabled aria-label="Kirim bukti transfer via WhatsApp">Kirim Bukti ke WhatsApp</button>
+
+    <div id="successMessage" class="success-message" role="alert" aria-live="polite" style="display:none;"></div>
   </div>
   <footer>
     &copy; 2025 Payment QRIS. Pastikan Anda sudah melakukan pembayaran sebelum mengirim bukti.
@@ -145,14 +163,20 @@
       const qrisImage = document.getElementById('qrisImage');
       const adminSelect = document.getElementById('adminSelect');
       const fileInput = document.getElementById('fileInput');
-      const sendBtn = document.getElementById('sendBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      const whatsappBtn = document.getElementById('whatsappBtn');
+      const successMessage = document.getElementById('successMessage');
 
-      function updateSendButtonState() {
-        sendBtn.disabled = !(adminSelect.value && fileInput.files.length > 0);
+      // Enable submit and whatsapp buttons only if admin selected and file uploaded
+      function updateButtonStates() {
+        const enabled = adminSelect.value && fileInput.files.length > 0;
+        submitBtn.disabled = !enabled;
+        whatsappBtn.disabled = !enabled;
+        successMessage.style.display = 'none';
       }
 
-      adminSelect.addEventListener('change', updateSendButtonState);
-      fileInput.addEventListener('change', updateSendButtonState);
+      adminSelect.addEventListener('change', updateButtonStates);
+      fileInput.addEventListener('change', updateButtonStates);
 
       // Download QRIS image
       downloadBtn.addEventListener('click', () => {
@@ -171,8 +195,8 @@
           .catch(() => alert('Gagal mendownload gambar QRIS.'));
       });
 
-      // Send WhatsApp with message template
-      sendBtn.addEventListener('click', () => {
+      // On submit, read file as base64 and save to localStorage with admin info
+      submitBtn.addEventListener('click', () => {
         if (!adminSelect.value) {
           alert('Silakan pilih admin terlebih dahulu.');
           return;
@@ -181,24 +205,68 @@
           alert('Silakan upload bukti transfer Anda.');
           return;
         }
+        const file = fileInput.files[0];
+        const reader = new FileReader();
 
-        const adminPhone = adminSelect.value;
+        reader.onload = function(event) {
+          const base64Data = event.target.result;
+          // Get existing uploads from localStorage
+          let uploads = JSON.parse(localStorage.getItem('proofUploads')) || [];
+          uploads.push({
+            id: Date.now(),
+            admin: adminSelect.value,
+            filename: file.name,
+            filetype: file.type,
+            data: base64Data
+          });
+          localStorage.setItem('proofUploads', JSON.stringify(uploads));
+          successMessage.textContent = 'Bukti transfer berhasil dikirim ke admin.';
+          successMessage.style.display = 'block';
+          // Reset form controls
+          adminSelect.value = '';
+          fileInput.value = '';
+          updateButtonStates();
+        };
+
+        reader.onerror = function() {
+          alert('Gagal membaca file. Silakan coba lagi.');
+        };
+
+        reader.readAsDataURL(file);
+      });
+
+      // WhatsApp send button action
+      whatsappBtn.addEventListener('click', () => {
+        if (!adminSelect.value) {
+          alert('Silakan pilih admin terlebih dahulu.');
+          return;
+        }
+        if (fileInput.files.length === 0) {
+          alert('Silakan upload bukti transfer Anda.');
+          return;
+        }
+        // Get phone number from selected option's data-phone attribute
+        const selectedOption = adminSelect.options[adminSelect.selectedIndex];
+        const phoneNumber = selectedOption.getAttribute('data-phone');
+        if (!phoneNumber) {
+          alert('Nomor WhatsApp admin tidak tersedia.');
+          return;
+        }
         const fileName = encodeURIComponent(fileInput.files[0].name);
         const messageLines = [
-          'Halo Admin,',
-          'Saya sudah melakukan pembayaran melalui QRIS.',
-          `Nama file bukti transfer saya adalah: ${fileName}`,
-          'Mohon konfirmasi pembayaran saya.',
-          '',
-          'Silakan saya lampirkan bukti transfer ini secara manual saat membuka WhatsApp.'
+          'Halo min,',
+          'gua dah tf ni min',
+          `tolong cek ss an gua min file: ${fileName}`,
+          'konfirmasi min tf an gua.',
+          ''
         ];
         const message = encodeURIComponent(messageLines.join('\n'));
-        
-        const whatsappUrl = `https://wa.me/${adminPhone}?text=${message}`;
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
         window.open(whatsappUrl, '_blank');
       });
     })();
   </script>
 </body>
 </html>
+
 
