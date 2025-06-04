@@ -1,6 +1,6 @@
   const stok = {
       'UANG IC': 10000000,
-      'UANG IC VIA LOGIN': 999999999999,
+      'UANG IC VIA LOGIN': 0,
       'De': 10000,
   'Slc': 10000,
   'Rif': 10000,
