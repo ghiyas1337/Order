@@ -11,10 +11,10 @@
   'Perban': 999,
   'Pil': 999,
   'Makan minum': 999,
-    'Paket Sotot 1':999,
-    'Paket Sotot 2':999,
-    'Paket Sotot 3':999,
-    'Paket Sotot Sultan':999
+    'Paket Sotot 1': 999,
+    'Paket Sotot 2': 999,
+    'Paket Sotot 3': 999,
+    'Paket Sotot Sultan': 999
     };
 
     function updateStok() {
