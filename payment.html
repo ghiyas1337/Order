@@ -1,472 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Payment RTM</title>
-<style>
-  :root {
-    --primary-color: #3a86ff;
-    --secondary-color: #8338ec;
-    --accent-color: #ffbe0b;
-    --bg-color: #f0f4f8;
-    --text-color: #222;
-    --border-radius: 12px;
-    --shadow: 0 8px 24px rgba(0,0,0,0.1);
-  }
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--bg-color);
-    color: var(--text-color);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-  }
-  h1,h2 {
-    margin: 0 0 1rem 0;
-    text-align: center;
-    color: var(--primary-color);
-  }
-  button {
-    cursor: pointer;
-    border: none;
-    border-radius: var(--border-radius);
-    background: var(--primary-color);
-    color: white;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    transition: background 0.3s ease;
-    user-select: none;
-    margin-top: 0.5rem;
-  }
-  button:hover:not(:disabled) {
-    background: var(--secondary-color);
-  }
-  button:disabled {
-    background: #aaa;
-    cursor: not-allowed;
-  }
-  input, textarea {
-    font-family: inherit;
-    font-size: 1rem;
-    padding: 0.5rem;
-    border-radius: var(--border-radius);
-    border: 1px solid #ccc;
-    outline: none;
-    width: 100%;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-    resize: vertical;
-  }
-  input:focus, textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 6px var(--primary-color);
-  }
-  .container {
-    width: 100%;
-    max-width: 460px;
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    display: flex;
-    flex-direction: column;
-  }
-  .qris-container {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  .qris-container img {
-    max-width: 240px;
-    width: 100%;
-    border-radius: var(--border-radius);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
-  }
-  #download-qris-btn {
-    display: block;
-    margin: 0.8rem auto 1rem;
-  }
-  .upload-feedback {
-    text-align: center;
-    min-height: 1.3rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-  }
-  .chat-container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ddd;
-    border-radius: var(--border-radius);
-    height: 350px;
-    background: #fafafa;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
-  }
-  .chat-messages {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 1rem;
-    font-size: 0.9rem;
-    line-height: 1.3;
-  }
-  .message {
-    max-width: 75%;
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 0.5rem;
-    word-wrap: break-word;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    position: relative;
-  }
-  .message.user {
-    background: var(--primary-color);
-    color: white;
-    margin-left: auto;
-    border-bottom-right-radius: 4px;
-  }
-  .message.admin {
-    background: #eee;
-    color: var(--text-color);
-    margin-right: auto;
-    border-bottom-left-radius: 4px;
-  }
-  .message img {
-    max-width: 200px;
-    border-radius: var(--border-radius);
-    margin-top: 0.25rem;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-  .chat-form {
-    display: flex;
-    border-top: 1px solid #ccc;
-    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
-    gap: 0.5rem;
-    align-items: center;
-  }
-  .chat-input {
-    flex-grow: 1;
-    border: 1px solid #ccc;
-    border-radius: var(--border-radius);
-    padding: 0.6rem 1rem;
-    font-size: 1rem;
-    font-family: inherit;
-    outline: none;
-    resize: none;
-    height: 40px;
-  }
-  #chat-send-btn {
-    background: var(--secondary-color);
-    border-radius: var(--border-radius);
-    padding: 0 1rem;
-    font-weight: 700;
-    font-size: 1rem;
-    color: white;
-    user-select: none;
-    border: none;
-    cursor: pointer;
-    height: 40px;
-  }
-  #chat-send-btn:disabled {
-    background: #bbb;
-    cursor: not-allowed;
-  }
-  #chat-send-btn:hover:not(:disabled) {
-    background: #6228c7;
-  }
-  #chat-upload-label {
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--primary-color);
-    color: white;
-    padding: 0 12px;
-    border-radius: var(--border-radius);
-    font-weight: 700;
-    height: 40px;
-    user-select: none;
-  }
-  #chat-upload-label:hover {
-    background: var(--secondary-color);
-  }
-  #chat-upload {
-    display: none;
-  }
-
-  /* Modal for image preview */
-  #modal-bg {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
-  #modal-bg.active {
-    display: flex;
-  }
-  #modal-content {
-    background: white;
-    border-radius: var(--border-radius);
-    max-width: 90vw;
-    max-height: 90vh;
-    padding: 1rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    position: relative;
-    user-select: none;
-  }
-  #modal-content img {
-    max-width: 100%;
-    max-height: 85vh;
-    display: block;
-    margin: 0 auto;
-    border-radius: var(--border-radius);
-  }
-  #modal-close {
-    position: absolute;
-    top: 10px; right: 15px;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #333;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    user-select: none;
-    line-height: 1;
-  }
-
-  @media (max-width: 480px) {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment with QRIS</title>
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #50e3c2;
+      --background-color: #f7f9fc;
+      --text-color: #333;
+      --button-bg: linear-gradient(45deg, #4a90e2, #50e3c2);
+      --button-hover-bg: linear-gradient(45deg, #357abd, #39c9a5);
+      --border-radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      background: var(--background-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+    h1 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 700;
+    }
     .container {
-      max-width: 95vw;
+      background: white;
+      max-width: 420px;
+      width: 100%;
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .message img {
-      max-width: 150px;
+    .qris-image {
+      width: 250px;
+      height: 250px;
+      object-fit: contain;
+      border: 2px solid var(--primary-color);
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      background: white;
     }
-  }
-</style>
+    button, select, input[type="file"] {
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      margin: 0.5rem 0;
+      transition: background 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+      font-weight: 600;
+    }
+    button {
+      background: var(--button-bg);
+      color: white;
+      box-shadow: var(--shadow);
+      user-select: none;
+    }
+    button:hover:not(:disabled) {
+      background: var(--button-hover-bg);
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      box-shadow: none;
+      color: #777;
+    }
+    select {
+      background: white;
+      border: 1px solid #ccc;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+    input[type="file"] {
+      padding: 0.25rem 1rem;
+      cursor: pointer;
+      background: white;
+      border: 1px solid #ccc;
+    }
+    .note {
+      font-size: 0.875rem;
+      color: #666;
+      margin-top: 0.25rem;
+      text-align: center;
+      max-width: 300px;
+    }
+    footer {
+      margin-top: auto;
+      font-size: 0.8rem;
+      color: #888;
+      padding: 1rem 0;
+      text-align: center;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-  <h1>Payment Dan Chat</h1>
-  <div class="container" role="main" aria-label="Payment and chat section">
-    <section class="qris-container" aria-label="QRIS payment code section">
-      <img src="Qris.jpeg" alt="QRIS payment QR code" id="qris-image" />
-      <button id="download-qris-btn" aria-label="Download QRIS QR code">Download QRIS</button>
-    </section>
+  <h1>Bayar dengan QRIS</h1>
+  <div class="container" role="main">
+    <img
+      src="Qris.jpeg"
+      alt="QRIS Payment Code"
+      id="qrisImage"
+      class="qris-image"
+      crossorigin="anonymous"
+    />
+    <button id="downloadBtn" aria-label="Download QRIS image">Download QRIS</button>
 
-    <section aria-label="Chat with admin">
-      <h2>Chat with Admin</h2>
-      <div class="chat-container" aria-live="polite" aria-atomic="false">
-        <div id="chat-messages" class="chat-messages" tabindex="0" aria-label="Chat messages"></div>
-        <form id="chat-form" class="chat-form" aria-label="Send chat message form" autocomplete="off">
-          <textarea id="chat-input" rows="1" placeholder="Type your message here..." aria-required="true" required class="chat-input"></textarea>
-          <label for="chat-upload" id="chat-upload-label" title="Upload screenshot (JPG, PNG, GIF)" aria-label="Upload screenshot">
-            📷
-          </label>
-          <input type="file" id="chat-upload" accept="image/jpeg,image/png,image/gif" />
-          <button type="submit" id="chat-send-btn" disabled>Send</button>
-        </form>
-      </div>
-      <div class="upload-feedback" id="upload-feedback" role="alert" aria-live="polite"></div>
-    </section>
+    <label for="adminSelect" style="margin-top:1rem; font-weight:600;">Pilih Admin untuk kirim bukti transfer:</label>
+    <select id="adminSelect" aria-describedby="adminHelp" aria-required="true">
+      <option value="" disabled selected>Pilih Admin</option>
+      <option value="6282118486096">Admin Diasz</option>
+      <option value="6283879722648">Admin Dimz</option>
+    </select>
+    <p id="adminHelp" class="note">Bukti transfer akan dikirim ke WhatsApp Admin yang dipilih</p>
+
+    <label for="fileInput" style="margin-top:1rem; font-weight:600;">Upload Bukti Transfer (gambar/file):</label>
+    <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" aria-required="true" />
+
+    <button id="sendBtn" disabled aria-label="Kirim bukti transfer via WhatsApp">Kirim Bukti ke WhatsApp</button>
   </div>
+  <footer>
+    &copy; 2025 Payment QRIS. Pastikan Anda sudah melakukan pembayaran sebelum mengirim bukti.
+  </footer>
 
-  <!-- Modal for image preview -->
-  <div id="modal-bg" role="dialog" aria-modal="true" aria-hidden="true">
-    <section id="modal-content" tabindex="-1">
-      <button id="modal-close" aria-label="Close modal">&times;</button>
-      <img id="modal-image" alt="Screenshot preview" />
-    </section>
-  </div>
+  <script>
+    (function() {
+      const downloadBtn = document.getElementById('downloadBtn');
+      const qrisImage = document.getElementById('qrisImage');
+      const adminSelect = document.getElementById('adminSelect');
+      const fileInput = document.getElementById('fileInput');
+      const sendBtn = document.getElementById('sendBtn');
 
-<script>
-  (function(){
-    // Storage keys and user id
-    const USER_ID_KEY = 'payment_chat_user_id';
-    const CHAT_STORAGE_KEY = 'payment_chat_messages';
-
-    // Elements
-    const qrisImage = document.getElementById('qris-image');
-    const btnDownloadQris = document.getElementById('download-qris-btn');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    const chatSendBtn = document.getElementById('chat-send-btn');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatUpload = document.getElementById('chat-upload');
-    const uploadFeedback = document.getElementById('upload-feedback');
-
-    const modalBg = document.getElementById('modal-bg');
-    const modalClose = document.getElementById('modal-close');
-    const modalImage = document.getElementById('modal-image');
-
-    // Identify or generate userId (device lock)
-    let userId = localStorage.getItem(USER_ID_KEY);
-    if (!userId) {
-      userId = 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
-      localStorage.setItem(USER_ID_KEY, userId);
-    }
-
-    // Download QRIS image
-    btnDownloadQris.addEventListener('click', () => {
-      const link = document.createElement('a');
-      link.href = qrisImage.src;
-      link.download = 'qris.png';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-
-    // Load chat messages for user
-    function loadChatMessages(userId) {
-      const all = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-      return all.filter(m => m.userId === userId);
-    }
-
-    // Save chat message
-    function saveChatMessage(msg) {
-      const all = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-      all.push(msg);
-      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(all));
-    }
-
-    // Render chat messages
-    function renderChat() {
-      const msgs = loadChatMessages(userId);
-      chatMessages.innerHTML = '';
-      if (msgs.length === 0) {
-        chatMessages.innerHTML = '<p style="text-align:center; color:#777;">No messages yet. Start chatting!</p>';
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        return;
+      function updateSendButtonState() {
+        sendBtn.disabled = !(adminSelect.value && fileInput.files.length > 0);
       }
-      msgs.forEach(msg => {
-        const div = document.createElement('div');
-        div.classList.add('message');
-        div.classList.add(msg.sender === 'admin' ? 'admin' : 'user');
-        if (msg.type === 'image') {
-          const img = document.createElement('img');
-          img.src = msg.text;
-          img.alt = 'Uploaded Screenshot';
-          img.tabIndex = 0;
-          img.addEventListener('click', () => openModal(msg.text));
-          img.addEventListener('keypress', e => {
-            if(e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              openModal(msg.text);
-            }
-          });
-          div.appendChild(img);
-        } else {
-          div.textContent = msg.text;
-        }
-        div.title = new Date(msg.timestamp).toLocaleString();
-        chatMessages.appendChild(div);
+
+      adminSelect.addEventListener('change', updateSendButtonState);
+      fileInput.addEventListener('change', updateSendButtonState);
+
+      // Download QRIS image
+      downloadBtn.addEventListener('click', () => {
+        fetch(qrisImage.src, {mode: 'cors'})
+          .then(response => response.blob())
+          .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'qris-payment.png';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          })
+          .catch(() => alert('Gagal mendownload gambar QRIS.'));
       });
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
 
-    // Handle input for enabling send button
-    chatInput.addEventListener('input', () => {
-      chatSendBtn.disabled = chatInput.value.trim().length === 0;
-    });
+      // Send WhatsApp with message template
+      sendBtn.addEventListener('click', () => {
+        if (!adminSelect.value) {
+          alert('Silakan pilih admin terlebih dahulu.');
+          return;
+        }
+        if (fileInput.files.length === 0) {
+          alert('Silakan upload bukti transfer Anda.');
+          return;
+        }
 
-    // Send text message
-    chatForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const text = chatInput.value.trim();
-      if (!text) return;
-      const msg = {
-        id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2,6),
-        userId,
-        sender: 'user',
-        text,
-        timestamp: Date.now(),
-        type: 'text'
-      };
-      saveChatMessage(msg);
-      chatInput.value = '';
-      chatSendBtn.disabled = true;
-      renderChat();
-    });
-
-    // Handle image upload as chat message
-    chatUpload.addEventListener('change', e => {
-      const file = e.target.files[0];
-      uploadFeedback.textContent = '';
-      uploadFeedback.style.color = 'var(--primary-color)';
-      if (!file) return;
-      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-      if(!validTypes.includes(file.type)) {
-        uploadFeedback.style.color = '#d9534f';
-        uploadFeedback.textContent = 'Invalid file type. Please upload JPG, PNG or GIF.';
-        chatUpload.value = '';
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        uploadFeedback.style.color = '#d9534f';
-        uploadFeedback.textContent = 'File too large. Max 5MB allowed.';
-        chatUpload.value = '';
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        const dataUrl = evt.target.result;
-        const msg = {
-          id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2,6),
-          userId,
-          sender: 'user',
-          text: dataUrl,
-          timestamp: Date.now(),
-          type: 'image'
-        };
-        saveChatMessage(msg);
-        uploadFeedback.textContent = 'Screenshot uploaded as chat message.';
-        renderChat();
-        chatUpload.value = '';
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // Modal open/close
-    function openModal(src) {
-      modalImage.src = src;
-      modalBg.classList.add('active');
-      modalBg.setAttribute('aria-hidden', 'false');
-      modalImage.focus();
-    }
-    function closeModal() {
-      modalBg.classList.remove('active');
-      modalBg.setAttribute('aria-hidden', 'true');
-      modalImage.src = '';
-    }
-    modalClose.addEventListener('click', closeModal);
-    modalBg.addEventListener('click', e => {
-      if(e.target === modalBg) closeModal();
-    });
-    document.addEventListener('keydown', e => {
-      if(e.key === 'Escape' && modalBg.classList.contains('active')) closeModal();
-    });
-
-    // Listen for changes in localStorage from other tabs to update chat real-time
-    window.addEventListener('storage', e => {
-      if(e.key === CHAT_STORAGE_KEY) {
-        renderChat();
-      }
-    });
-
-    renderChat();
-  })();
-</script>
+        const adminPhone = adminSelect.value;
+        const fileName = encodeURIComponent(fileInput.files[0].name);
+        const messageLines = [
+          'Halo Admin,',
+          'Saya sudah melakukan pembayaran melalui QRIS.',
+          `Nama file bukti transfer saya adalah: ${fileName}`,
+          'Mohon konfirmasi pembayaran saya.',
+          '',
+          'Silakan saya lampirkan bukti transfer ini secara manual saat membuka WhatsApp.'
+        ];
+        const message = encodeURIComponent(messageLines.join('\n'));
+        
+        const whatsappUrl = `https://wa.me/${adminPhone}?text=${message}`;
+        window.open(whatsappUrl, '_blank');
+      });
+    })();
+  </script>
 </body>
 </html>
-
 
