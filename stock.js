@@ -58,7 +58,7 @@
     }
 
     function showSection(sectionId) {
-      const sections = ['uic-section', 'senjata-section', 'item-section', 'paket-section'1];
+      const sections = ['uic-section', 'senjata-section', 'item-section', 'paket-section'];
       sections.forEach(id => {
         const el = document.getElementById(id);
         el.classList.toggle('hidden', id !== sectionId);
