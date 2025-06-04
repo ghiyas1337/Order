@@ -58,16 +58,16 @@
     }
 
     function showSection(sectionId) {
-      const sections = ['uic-section', 'senjata-section', 'item-section', 'paket-section'];
-      sections.forEach(id => {
-        const el = document.getElementById(id);
-        el.classList.toggle('hidden', id !== sectionId);
-      });
+  const sections = ['uic-section', 'senjata-section', 'item-section', 'paket-section'];
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.toggle('hidden', id !== sectionId);
+  });
 
-      document.querySelectorAll('nav.menu-header a').forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href').replace('#', '') === sectionId);
-      });
-    }
+  document.querySelectorAll('nav.menu-header a').forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href').replace('#', '') === sectionId);
+  });
+}
 
     document.querySelectorAll('nav.menu-header a').forEach(link => {
       link.addEventListener('click', function (e) {
