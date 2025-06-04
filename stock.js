@@ -10,7 +10,11 @@
   'Marjun': 999,
   'Perban': 999,
   'Pil': 999,
-  'Makan minum': 999
+  'Makan minum': 999,
+    'Paket Sotot 1':999,
+    'Paket Sotot 2':999,
+    'Paket Sotot 3':999,
+    'Paket Sotot Sultan':999
     };
 
     function updateStok() {
@@ -42,6 +46,10 @@
       toggle('item-perban', 'Perban', 'stok-perban', 'Perban');
       toggle('item-pil', 'Pil', 'stok-pil', 'Pill Stress');
       toggle('item-makanminum', 'Makan minum', 'stok-makanminum', 'Makan Minum');
+      toggle('item-sotot1', 'Paket Sotot 1', 'stock-sotot1', 'Paket Sotot 1');
+      toggle('item-sotot2', 'Paket Sotot 2', 'stock-sotot2', 'Paket Sotot 2');
+      toggle('item-sotot3', 'Paket Sotot 3', 'stock-sotot3', 'Paket Sotot 3');
+      toggle('item-sotot4', 'Paket Sotot Sultan', 'stock-sotot4', 'Paket Sotot Sultan');
     }
 
     function goToPayment(productName) {
