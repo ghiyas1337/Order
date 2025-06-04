@@ -1,761 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Payment with QRIS & Chat</title>
-  <style>
-    :root {
-      --primary-color: #4a90e2;
-      --secondary-color: #50e3c2;
-      --bg-color: #f4f7fa;
-      --text-color: #333;
-      --admin-bg: #2c3e50;
-      --admin-text: #ecf0f1;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background: var(--bg-color);
-      color: var(--text-color);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
-    }
-    h1 {
-      color: var(--primary-color);
-      margin-bottom: 0.5rem;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Payment RTM</title>
+<style>
+  :root {
+    --primary-color: #3a86ff;
+    --secondary-color: #8338ec;
+    --accent-color: #ffbe0b;
+    --bg-color: #f0f4f8;
+    --text-color: #222;
+    --border-radius: 12px;
+    --shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  h1,h2 {
+    margin: 0 0 1rem 0;
+    text-align: center;
+    color: var(--primary-color);
+  }
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+    user-select: none;
+    margin-top: 0.5rem;
+  }
+  button:hover:not(:disabled) {
+    background: var(--secondary-color);
+  }
+  button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+  input, textarea {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #ccc;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    resize: vertical;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px var(--primary-color);
+  }
+  .container {
+    width: 100%;
+    max-width: 460px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .qris-container {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .qris-container img {
+    max-width: 240px;
+    width: 100%;
+    border-radius: var(--border-radius);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  }
+  #download-qris-btn {
+    display: block;
+    margin: 0.8rem auto 1rem;
+  }
+  .upload-feedback {
+    text-align: center;
+    min-height: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+  }
+  .chat-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    height: 350px;
+    background: #fafafa;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+  }
+  .chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+  .message {
+    max-width: 75%;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+  }
+  .message.user {
+    background: var(--primary-color);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+  }
+  .message.admin {
+    background: #eee;
+    color: var(--text-color);
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+  }
+  .message img {
+    max-width: 200px;
+    border-radius: var(--border-radius);
+    margin-top: 0.25rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .chat-form {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .chat-input {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    resize: none;
+    height: 40px;
+  }
+  #chat-send-btn {
+    background: var(--secondary-color);
+    border-radius: var(--border-radius);
+    padding: 0 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+    color: white;
+    user-select: none;
+    border: none;
+    cursor: pointer;
+    height: 40px;
+  }
+  #chat-send-btn:disabled {
+    background: #bbb;
+    cursor: not-allowed;
+  }
+  #chat-send-btn:hover:not(:disabled) {
+    background: #6228c7;
+  }
+  #chat-upload-label {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color);
+    color: white;
+    padding: 0 12px;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    height: 40px;
+    user-select: none;
+  }
+  #chat-upload-label:hover {
+    background: var(--secondary-color);
+  }
+  #chat-upload {
+    display: none;
+  }
+
+  /* Modal for image preview */
+  #modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  #modal-bg.active {
+    display: flex;
+  }
+  #modal-content {
+    background: white;
+    border-radius: var(--border-radius);
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    position: relative;
+    user-select: none;
+  }
+  #modal-content img {
+    max-width: 100%;
+    max-height: 85vh;
+    display: block;
+    margin: 0 auto;
+    border-radius: var(--border-radius);
+  }
+  #modal-close {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    user-select: none;
+    line-height: 1;
+  }
+
+  @media (max-width: 480px) {
     .container {
-      max-width: 960px;
-      width: 100%;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      max-width: 95vw;
     }
-    #user-section, #admin-section {
-      display: none;
+    .message img {
+      max-width: 150px;
     }
-    #user-section.active, #admin-section.active {
-      display: block;
-    }
-    .qris-container {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .qris-container img {
-      max-width: 240px;
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 6px 10px rgba(0,0,0,0.15);
-    }
-    .btn {
-      background: var(--primary-color);
-      color: white;
-      padding: 0.5rem 1rem;
-      border: none;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: background 0.3s ease;
-      font-size: 1rem;
-      margin-top: 0.8rem;
-      user-select: none;
-    }
-    .btn:hover {
-      background: var(--secondary-color);
-      color: #333;
-    }
-    .file-upload {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    .file-upload input[type="file"] {
-      margin-top: 0.5rem;
-    }
-    .chat-container {
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      height: 320px;
-      max-width: 100%;
-      background: #fafafa;
-    }
-    .chat-messages {
-      flex-grow: 1;
-      overflow-y: auto;
-      padding: 0.75rem 1rem;
-      font-size: 0.95rem;
-    }
-    .chat-message {
-      margin-bottom: 0.5rem;
-      max-width: 70%;
-      padding: 0.5rem 1rem;
-      border-radius: 16px;
-      line-height: 1.3;
-      word-wrap: break-word;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-    .chat-message.user {
-      background: var(--primary-color);
-      color: white;
-      margin-left: auto;
-      border-bottom-right-radius: 2px;
-    }
-    .chat-message.admin {
-      background: #dfe6ef;
-      color: #333;
-      margin-right: auto;
-      border-bottom-left-radius: 2px;
-    }
-    .chat-input {
-      display: flex;
-      border-top: 1px solid #ccc;
-    }
-    .chat-input textarea {
-      flex-grow: 1;
-      resize: none;
-      border: none;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      border-bottom-left-radius: 12px;
-      border-top-left-radius: 12px;
-      font-family: inherit;
-      outline: none;
-      background: white;
-    }
-    .chat-input button {
-      border: none;
-      background: var(--primary-color);
-      color: white;
-      padding: 0 1.2rem;
-      border-bottom-right-radius: 12px;
-      border-top-right-radius: 12px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      font-size: 1rem;
-      user-select: none;
-    }
-    .chat-input button:disabled {
-      background: #a0b5d7;
-      cursor: not-allowed;
-    }
-    /* Admin Login */
-    #admin-login {
-      max-width: 320px;
-      margin: auto;
-    }
-    #admin-login label {
-      display: block;
-      margin: 0.5rem 0 0.2rem;
-      font-weight: 600;
-    }
-    #admin-login input[type="text"],
-    #admin-login input[type="password"] {
-      width: 100%;
-      padding: 0.5rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-      outline: none;
-      box-sizing: border-box;
-    }
-    #admin-login input[type="text"]:focus,
-    #admin-login input[type="password"]:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 5px var(--primary-color);
-    }
-    .error-msg {
-      color: #d9534f;
-      margin-top: 0.5rem;
-      font-weight: 600;
-      text-align: center;
-    }
-    /* Admin panel */
-    #admin-panel {
-      background: var(--admin-bg);
-      color: var(--admin-text);
-      border-radius: 12px;
-      padding: 1rem;
-    }
-    #admin-panel h2 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-    }
-    .admin-section {
-      margin-bottom: 2rem;
-    }
-    .uploaded-screenshots {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #34495e;
-      padding: 1rem;
-      border-radius: 8px;
-      background: #34495e;
-    }
-    .screenshot-item {
-      flex: 1 0 120px;
-      background: #2c3e50;
-      padding: 0.5rem;
-      border-radius: 8px;
-      box-shadow: inset 0 0 8px rgba(255,255,255,0.1);
-      cursor: pointer;
-      text-align: center;
-    }
-    .screenshot-item img {
-      max-width: 100%;
-      border-radius: 6px;
-      display: block;
-      margin: 0 auto 0.4rem;
-    }
-    .chat-list {
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #34495e;
-      border-radius: 8px;
-      padding: 1rem;
-      background: #34495e;
-      font-size: 0.9rem;
-    }
-    .chat-entry {
-      border-bottom: 1px solid #3d566e;
-      padding: 0.5rem 0;
-    }
-    .chat-entry:last-child {
-      border-bottom: none;
-    }
-    .chat-entry strong {
-      color: var(--secondary-color);
-    }
-    .chat-entry .chat-text {
-      margin: 0.25rem 0 0 1rem;
-    }
-    .reply-section {
-      margin-top: 1rem;
-      display: flex;
-      gap: 0.5rem;
-    }
-    .reply-section textarea {
-      flex-grow: 1;
-      resize: vertical;
-      border-radius: 8px;
-      padding: 0.5rem;
-      font-family: inherit;
-      font-size: 1rem;
-      border: 1px solid #34495e;
-      background: #22303f;
-      color: var(--admin-text);
-      min-height: 70px;
-      outline: none;
-    }
-    .reply-section button {
-      background: var(--secondary-color);
-      border: none;
-      padding: 0 1rem;
-      cursor: pointer;
-      border-radius: 8px;
-      font-weight: 700;
-      color: var(--admin-bg);
-      user-select: none;
-      transition: background 0.2s ease;
-    }
-    .reply-section button:disabled {
-      background: #6ecab8cc;
-      cursor: not-allowed;
-    }
-    .reply-section button:hover:not(:disabled) {
-      background: #39d8b7;
-    }
-    /* Show uploaded screenshot in modal */
-    #modal-bg {
-      position: fixed;
-      top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.75);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    #modal-bg.active {
-      display: flex;
-    }
-    #modal-content {
-      background: #fff;
-      border-radius: 12px;
-      max-width: 90vw;
-      max-height: 90vh;
-      padding: 1rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      position: relative;
-    }
-    #modal-content img {
-      max-width: 100%;
-      max-height: 80vh;
-      display: block;
-    }
-    #modal-close {
-      position: absolute;
-      top: 8px; right: 12px;
-      font-size: 1.5rem;
-      color: #333;
-      cursor: pointer;
-      user-select: none;
-      font-weight: 700;
-    }
-    /* Responsive */
-    @media (max-width: 600px) {
-      .chat-messages {
-        font-size: 0.9rem;
-      }
-      .chat-input button {
-        font-size: 0.9rem;
-      }
-      .qris-container img {
-        max-width: 180px;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <h1>Payment & Chat Portal</h1>
+  <h1>Payment Dan Chat</h1>
+  <div class="container" role="main" aria-label="Payment and chat section">
+    <section class="qris-container" aria-label="QRIS payment code section">
+      <img src="Qris.jpeg" alt="QRIS payment QR code" id="qris-image" />
+      <button id="download-qris-btn" aria-label="Download QRIS QR code">Download QRIS</button>
+    </section>
 
-  <div class="container">
-    <nav style="margin-bottom: 1rem; text-align:center;">
-      <button id="btn-user" class="btn">User View</button>
-      <button id="btn-admin" class="btn" style="background:#333; color:#eee;">Admin View</button>
-    </nav>
-
-    <!-- USER SECTION -->
-    <section id="user-section" class="active" aria-label="User payment and chat section">
-      <h2>Scan & Pay using QRIS</h2>
-      <div class="qris-container" aria-live="polite" aria-atomic="true" aria-relevant="all">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/QR_Code_Example.svg/240px-QR_Code_Example.svg.png" alt="QRIS Payment QR Code" id="qris-image"/>
-        <br />
-        <button class="btn" id="download-qris-btn" aria-label="Download QRIS QR code">Download QRIS</button>
-      </div>
-      <div class="file-upload">
-        <label for="screenshot-upload"><strong>Upload your payment screenshot</strong></label>
-        <input type="file" id="screenshot-upload" accept="image/*" aria-describedby="upload-desc"/>
-        <small id="upload-desc">Accepted formats: JPG, PNG, GIF</small>
-      </div>
-      <div id="upload-feedback" role="alert" style="color:#d9534f; min-height:1.2rem;"></div>
-
+    <section aria-label="Chat with admin">
       <h2>Chat with Admin</h2>
       <div class="chat-container" aria-live="polite" aria-atomic="false">
         <div id="chat-messages" class="chat-messages" tabindex="0" aria-label="Chat messages"></div>
-        <form id="chat-form" class="chat-input" aria-label="Send chat message form">
-          <textarea id="chat-input" rows="1" placeholder="Type your message here..." aria-required="true" required></textarea>
+        <form id="chat-form" class="chat-form" aria-label="Send chat message form" autocomplete="off">
+          <textarea id="chat-input" rows="1" placeholder="Type your message here..." aria-required="true" required class="chat-input"></textarea>
+          <label for="chat-upload" id="chat-upload-label" title="Upload screenshot (JPG, PNG, GIF)" aria-label="Upload screenshot">
+            📷
+          </label>
+          <input type="file" id="chat-upload" accept="image/jpeg,image/png,image/gif" />
           <button type="submit" id="chat-send-btn" disabled>Send</button>
         </form>
       </div>
-    </section>
-
-    <!-- ADMIN SECTION -->
-    <section id="admin-section" aria-label="Admin panel">
-      <div id="admin-login">
-        <h2>Admin Login</h2>
-        <form id="login-form" aria-label="Admin login form">
-          <label for="admin-username">Username</label>
-          <input type="text" id="admin-username" autocomplete="username" required />
-          <label for="admin-password">Password</label>
-          <input type="password" id="admin-password" autocomplete="current-password" required />
-          <button type="submit" class="btn">Login</button>
-          <div id="login-error" class="error-msg" role="alert" aria-live="assertive"></div>
-        </form>
-      </div>
-      <div id="admin-panel" style="display:none;">
-        <h2>Admin Panel</h2>
-        <section class="admin-section" aria-label="Uploaded payment screenshots">
-          <h3>Uploaded Screenshots</h3>
-          <div id="screenshots-list" class="uploaded-screenshots" tabindex="0" aria-live="polite"></div>
-        </section>
-        <section class="admin-section" aria-label="User chat messages">
-          <h3>User Chats</h3>
-          <div id="chats-list" class="chat-list" tabindex="0" aria-live="polite"></div>
-          <form id="admin-reply-form" class="reply-section" aria-label="Admin reply to user chat" style="display:none;">
-            <textarea id="admin-reply-input" placeholder="Type your reply here..." required rows="2"></textarea>
-            <button type="submit" disabled>Send Reply</button>
-          </form>
-        </section>
-        <button id="admin-logout" class="btn" style="background:#d9534f;">Logout</button>
-      </div>
+      <div class="upload-feedback" id="upload-feedback" role="alert" aria-live="polite"></div>
     </section>
   </div>
 
-  <!-- Modal for viewing screenshot -->
+  <!-- Modal for image preview -->
   <div id="modal-bg" role="dialog" aria-modal="true" aria-hidden="true">
-    <div id="modal-content">
+    <section id="modal-content" tabindex="-1">
       <button id="modal-close" aria-label="Close modal">&times;</button>
-      <img src="" alt="Uploaded Screenshot" id="modal-image" />
-    </div>
+      <img id="modal-image" alt="Screenshot preview" />
+    </section>
   </div>
 
-  <script>
-    (function(){
-      // Constants
-      const ADMIN_USERNAME = 'admin';
-      const ADMIN_PASSWORD = 'admin123';
+<script>
+  (function(){
+    // Storage keys and user id
+    const USER_ID_KEY = 'payment_chat_user_id';
+    const CHAT_STORAGE_KEY = 'payment_chat_messages';
 
-      // Elements
-      const btnUserView = document.getElementById('btn-user');
-      const btnAdminView = document.getElementById('btn-admin');
-      const userSection = document.getElementById('user-section');
-      const adminSection = document.getElementById('admin-section');
+    // Elements
+    const qrisImage = document.getElementById('qris-image');
+    const btnDownloadQris = document.getElementById('download-qris-btn');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatUpload = document.getElementById('chat-upload');
+    const uploadFeedback = document.getElementById('upload-feedback');
 
-      // User elements
-      const qrisImage = document.getElementById('qris-image');
-      const btnDownloadQris = document.getElementById('download-qris-btn');
-      const fileUploadInput = document.getElementById('screenshot-upload');
-      const uploadFeedback = document.getElementById('upload-feedback');
+    const modalBg = document.getElementById('modal-bg');
+    const modalClose = document.getElementById('modal-close');
+    const modalImage = document.getElementById('modal-image');
 
-      const chatMessages = document.getElementById('chat-messages');
-      const chatForm = document.getElementById('chat-form');
-      const chatInput = document.getElementById('chat-input');
-      const chatSendBtn = document.getElementById('chat-send-btn');
+    // Identify or generate userId (device lock)
+    let userId = localStorage.getItem(USER_ID_KEY);
+    if (!userId) {
+      userId = 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
+      localStorage.setItem(USER_ID_KEY, userId);
+    }
 
-      // Admin elements
-      const adminLoginForm = document.getElementById('login-form');
-      const adminUsernameInput = document.getElementById('admin-username');
-      const adminPasswordInput = document.getElementById('admin-password');
-      const loginError = document.getElementById('login-error');
-      const adminPanel = document.getElementById('admin-panel');
-      const screenshotsList = document.getElementById('screenshots-list');
-      const chatsList = document.getElementById('chats-list');
-      const adminReplyForm = document.getElementById('admin-reply-form');
-      const adminReplyInput = document.getElementById('admin-reply-input');
-      const adminReplyBtn = adminReplyForm.querySelector('button');
-      const adminLogoutBtn = document.getElementById('admin-logout');
+    // Download QRIS image
+    btnDownloadQris.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.href = qrisImage.src;
+      link.download = 'qris.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
 
-      // Modal elements
-      const modalBg = document.getElementById('modal-bg');
-      const modalClose = document.getElementById('modal-close');
-      const modalImage = document.getElementById('modal-image');
+    // Load chat messages for user
+    function loadChatMessages(userId) {
+      const all = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
+      return all.filter(m => m.userId === userId);
+    }
 
-      // Identify user by localStorage (simulate IP identification)
-      const USER_ID_KEY = 'payment_chat_user_id';
-      let userId = localStorage.getItem(USER_ID_KEY);
-      if (!userId) {
-        userId = 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
-        localStorage.setItem(USER_ID_KEY, userId);
-      }
+    // Save chat message
+    function saveChatMessage(msg) {
+      const all = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
+      all.push(msg);
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(all));
+    }
 
-      // Storage keys
-      const CHAT_STORAGE_KEY = 'payment_chat_messages';
-      const SCREENSHOT_STORAGE_KEY = 'payment_uploaded_screenshots';
-
-      // Data structures tenant by userId
-      // chatMessages stored as array: [{ id, userId, sender: 'user'|'admin', text, timestamp }]
-      // screenshots stored as array: [{ id, userId, name, dataUrl, timestamp }]
-
-      // UI state
-      let adminChatSelectedUserId = null;
-
-      // Show section toggles
-      btnUserView.addEventListener('click', () => {
-        userSection.classList.add('active');
-        adminSection.classList.remove('active');
-      });
-      btnAdminView.addEventListener('click', () => {
-        adminSection.classList.add('active');
-        userSection.classList.remove('active');
-      });
-
-      // Start with user section active
-      userSection.classList.add('active');
-
-      // Download QRIS button
-      btnDownloadQris.addEventListener('click', () => {
-        const link = document.createElement('a');
-        link.href = qrisImage.src;
-        link.download = 'qris.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      });
-
-      // File upload handler
-      fileUploadInput.addEventListener('change', (e) => {
-        uploadFeedback.textContent = '';
-        const file = e.target.files[0];
-        if (!file) return;
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (!validTypes.includes(file.type)) {
-          uploadFeedback.textContent = 'Invalid file type. Please upload JPG, PNG or GIF images.';
-          fileUploadInput.value = '';
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          const dataUrl = evt.target.result;
-          saveUploadedScreenshot(userId, file.name, dataUrl);
-          uploadFeedback.style.color = 'green';
-          uploadFeedback.textContent = 'Screenshot uploaded successfully.';
-          fileUploadInput.value = '';
-          // Refresh admin screenshots list if logged in
-          if (adminPanel.style.display === 'block') {
-            renderScreenshotsList();
-          }
-        };
-        reader.readAsDataURL(file);
-      });
-
-      function saveUploadedScreenshot(userId, name, dataUrl) {
-        let screenshots = JSON.parse(localStorage.getItem(SCREENSHOT_STORAGE_KEY)) || [];
-        const id = 'ss-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
-        screenshots.push({ id, userId, name, dataUrl, timestamp: Date.now() });
-        localStorage.setItem(SCREENSHOT_STORAGE_KEY, JSON.stringify(screenshots));
-      }
-
-      // Chat input enable/disable button
-      chatInput.addEventListener('input', () => {
-        chatSendBtn.disabled = chatInput.value.trim().length === 0;
-      });
-
-      // Load and render user chat messages
-      function loadChatMessages(userId) {
-        const allChats = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-        return allChats.filter(msg => msg.userId === userId);
-      }
-
-      function saveChatMessage(message) {
-        const allChats = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-        allChats.push(message);
-        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(allChats));
-      }
-
-      function renderUserChat() {
-        const msgs = loadChatMessages(userId);
-        chatMessages.innerHTML = '';
-        if (msgs.length === 0) {
-          chatMessages.innerHTML = '<p style="text-align:center; color:#666;">No messages yet. Start chatting!</p>';
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-          return;
-        }
-        msgs.forEach(msg => {
-          const div = document.createElement('div');
-          div.classList.add('chat-message');
-          div.classList.add(msg.sender === 'admin' ? 'admin' : 'user');
-          div.textContent = msg.text;
-          div.title = new Date(msg.timestamp).toLocaleString();
-          chatMessages.appendChild(div);
-        });
+    // Render chat messages
+    function renderChat() {
+      const msgs = loadChatMessages(userId);
+      chatMessages.innerHTML = '';
+      if (msgs.length === 0) {
+        chatMessages.innerHTML = '<p style="text-align:center; color:#777;">No messages yet. Start chatting!</p>';
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        return;
       }
+      msgs.forEach(msg => {
+        const div = document.createElement('div');
+        div.classList.add('message');
+        div.classList.add(msg.sender === 'admin' ? 'admin' : 'user');
+        if (msg.type === 'image') {
+          const img = document.createElement('img');
+          img.src = msg.text;
+          img.alt = 'Uploaded Screenshot';
+          img.tabIndex = 0;
+          img.addEventListener('click', () => openModal(msg.text));
+          img.addEventListener('keypress', e => {
+            if(e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openModal(msg.text);
+            }
+          });
+          div.appendChild(img);
+        } else {
+          div.textContent = msg.text;
+        }
+        div.title = new Date(msg.timestamp).toLocaleString();
+        chatMessages.appendChild(div);
+      });
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-      // User chat form submit
-      chatForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const text = chatInput.value.trim();
-        if (!text) return;
+    // Handle input for enabling send button
+    chatInput.addEventListener('input', () => {
+      chatSendBtn.disabled = chatInput.value.trim().length === 0;
+    });
+
+    // Send text message
+    chatForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+      const msg = {
+        id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2,6),
+        userId,
+        sender: 'user',
+        text,
+        timestamp: Date.now(),
+        type: 'text'
+      };
+      saveChatMessage(msg);
+      chatInput.value = '';
+      chatSendBtn.disabled = true;
+      renderChat();
+    });
+
+    // Handle image upload as chat message
+    chatUpload.addEventListener('change', e => {
+      const file = e.target.files[0];
+      uploadFeedback.textContent = '';
+      uploadFeedback.style.color = 'var(--primary-color)';
+      if (!file) return;
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if(!validTypes.includes(file.type)) {
+        uploadFeedback.style.color = '#d9534f';
+        uploadFeedback.textContent = 'Invalid file type. Please upload JPG, PNG or GIF.';
+        chatUpload.value = '';
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        uploadFeedback.style.color = '#d9534f';
+        uploadFeedback.textContent = 'File too large. Max 5MB allowed.';
+        chatUpload.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const dataUrl = evt.target.result;
         const msg = {
           id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2,6),
           userId,
           sender: 'user',
-          text,
-          timestamp: Date.now()
+          text: dataUrl,
+          timestamp: Date.now(),
+          type: 'image'
         };
         saveChatMessage(msg);
-        chatInput.value = '';
-        chatSendBtn.disabled = true;
-        renderUserChat();
-        // Simulate notifying admin by refreshing admin chats if open
-        if (adminPanel.style.display === 'block') {
-          renderChatsList();
-        }
-      });
+        uploadFeedback.textContent = 'Screenshot uploaded as chat message.';
+        renderChat();
+        chatUpload.value = '';
+      };
+      reader.readAsDataURL(file);
+    });
 
-      // Admin login form submit
-      adminLoginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        loginError.textContent = '';
-        const username = adminUsernameInput.value.trim();
-        const password = adminPasswordInput.value;
-        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-          // Success
-          adminLoginForm.style.display = 'none';
-          adminPanel.style.display = 'block';
-          renderScreenshotsList();
-          renderChatsList();
-        } else {
-          loginError.textContent = 'Incorrect username or password.';
-        }
-      });
+    // Modal open/close
+    function openModal(src) {
+      modalImage.src = src;
+      modalBg.classList.add('active');
+      modalBg.setAttribute('aria-hidden', 'false');
+      modalImage.focus();
+    }
+    function closeModal() {
+      modalBg.classList.remove('active');
+      modalBg.setAttribute('aria-hidden', 'true');
+      modalImage.src = '';
+    }
+    modalClose.addEventListener('click', closeModal);
+    modalBg.addEventListener('click', e => {
+      if(e.target === modalBg) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && modalBg.classList.contains('active')) closeModal();
+    });
 
-      // Admin logout
-      adminLogoutBtn.addEventListener('click', () => {
-        adminLoginForm.style.display = 'block';
-        adminPanel.style.display = 'none';
-        adminUsernameInput.value = '';
-        adminPasswordInput.value = '';
-        loginError.textContent = '';
-        adminReplyForm.style.display = 'none';
-        adminChatSelectedUserId = null;
-      });
-
-      // Render screenshots list
-      function renderScreenshotsList() {
-        const screenshots = JSON.parse(localStorage.getItem(SCREENSHOT_STORAGE_KEY)) || [];
-        if (screenshots.length === 0) {
-          screenshotsList.innerHTML = '<p>No screenshots uploaded yet.</p>';
-          return;
-        }
-        screenshotsList.innerHTML = '';
-        screenshots.forEach(ss => {
-          const div = document.createElement('div');
-          div.className = 'screenshot-item';
-          div.title = `Uploaded by User: ${ss.userId}, ${ss.name} at ${new Date(ss.timestamp).toLocaleString()}`;
-          div.tabIndex = 0;
-          const img = document.createElement('img');
-          img.src = ss.dataUrl;
-          img.alt = `Screenshot uploaded by user`;
-          div.appendChild(img);
-          const label = document.createElement('div');
-          label.textContent = ss.name;
-          label.style.fontSize = '0.85rem';
-          label.style.color = '#aad7f7';
-          div.appendChild(label);
-          div.addEventListener('click', () => {
-            openModal(ss.dataUrl);
-          });
-          div.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              openModal(ss.dataUrl);
-            }
-          });
-          screenshotsList.appendChild(div);
-        });
+    // Listen for changes in localStorage from other tabs to update chat real-time
+    window.addEventListener('storage', e => {
+      if(e.key === CHAT_STORAGE_KEY) {
+        renderChat();
       }
+    });
 
-      // Modal controls
-      function openModal(imageSrc) {
-        modalImage.src = imageSrc;
-        modalBg.classList.add('active');
-        modalBg.setAttribute('aria-hidden', 'false');
-        modalClose.focus();
-      }
-      function closeModal() {
-        modalBg.classList.remove('active');
-        modalBg.setAttribute('aria-hidden', 'true');
-        modalImage.src = '';
-      }
-      modalClose.addEventListener('click', closeModal);
-      modalBg.addEventListener('click', (e) => {
-        if (e.target === modalBg) {
-          closeModal();
-        }
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalBg.classList.contains('active')) {
-          closeModal();
-        }
-      });
-
-      // Render admin chat users list
-      // List unique userIds from chats
-      function getAllChatUsers() {
-        const chats = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-        const userIds = [...new Set(chats.map(c=>c.userId))];
-        return userIds;
-      }
-
-      // Render chats list for admin
-      // Listing user chats summaries by userId, latest message preview and reply controls
-      function renderChatsList() {
-        const chats = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-        const userIds = getAllChatUsers();
-        if (userIds.length === 0) {
-          chatsList.innerHTML = '<p>No chats available.</p>';
-          adminReplyForm.style.display = 'none';
-          adminChatSelectedUserId = null;
-          return;
-        }
-        chatsList.innerHTML = '';
-        userIds.forEach(uid => {
-          // last message of this user chat
-          const userChats = chats.filter(c => c.userId === uid);
-          const lastMsg = userChats[userChats.length-1];
-          const div = document.createElement('div');
-          div.className = 'chat-entry';
-          div.tabIndex = 0;
-          div.setAttribute('role', 'button');
-          div.setAttribute('aria-label', `Chat with user ${uid}: last message ${lastMsg.text}`);
-          div.style.cursor = 'pointer';
-          const strong = document.createElement('strong');
-          strong.textContent = uid;
-          div.appendChild(strong);
-          userChats.forEach(msg => {
-            const p = document.createElement('p');
-            p.className = 'chat-text';
-            p.textContent = `${msg.sender === 'user' ? 'User' : 'Admin'}: ${msg.text}`;
-            div.appendChild(p);
-          });
-          div.addEventListener('click', () => {
-            selectChatUser(uid);
-          });
-          div.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              selectChatUser(uid);
-            }
-          });
-          chatsList.appendChild(div);
-        });
-      }
-
-      // Select chat user for reply
-      function selectChatUser(uid) {
-        adminChatSelectedUserId = uid;
-        adminReplyForm.style.display = 'flex';
-        adminReplyInput.value = '';
-        adminReplyBtn.disabled = true;
-        adminReplyInput.focus();
-      }
-
-      // Enable admin reply input button
-      adminReplyInput.addEventListener('input', () => {
-        adminReplyBtn.disabled = adminReplyInput.value.trim().length === 0;
-      });
-
-      // Handle admin reply submit
-      adminReplyForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const text = adminReplyInput.value.trim();
-        if (!text || !adminChatSelectedUserId) return;
-        const msg = {
-          id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2,6),
-          userId: adminChatSelectedUserId,
-          sender: 'admin',
-          text,
-          timestamp: Date.now()
-        };
-        saveChatMessage(msg);
-        adminReplyInput.value = '';
-        adminReplyBtn.disabled = true;
-        renderChatsList();
-        // If current user is admin replying to userId, update user section chat if visible and user matches (simulate)
-        if (userId === adminChatSelectedUserId && userSection.classList.contains('active')) {
-          renderUserChat();
-        }
-      });
-
-      // Initialize user chat view
-      renderUserChat();
-
-    })();
-  </script>
+    renderChat();
+  })();
+</script>
 </body>
 </html>
 
